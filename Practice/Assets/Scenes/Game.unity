@@ -2602,6 +2602,8 @@ MonoBehaviour:
     enemyHealth: 3
     colorsToSpawn: 000000000200000001000000030000000400000005000000
   enemy: {fileID: 2753646212322466918, guid: 7f3b4c54a8c1e4ddeabc2bf002423f00, type: 3}
+  enemyHealthBar: {fileID: 9038781108312941568, guid: 0ffeb91bec7d34c2d84025b267ddd559,
+    type: 3}
   deathParticles:
   - {fileID: 3120143630414091388, guid: 9cba66ad7d480405aa10f17d8ad8b6d7, type: 3}
   - {fileID: 3120143630414091388, guid: 13b5f23f35b9e49a6868b0a8d5554041, type: 3}
@@ -12038,7 +12040,7 @@ MonoBehaviour:
   newWaveEnemyCount: {fileID: 1191556880}
   scoreUI: {fileID: 1387474833}
   gameOverScoreUI: {fileID: 531172514}
-  currentEnemyLeftUI: {fileID: 0}
+  currentEnemyLeftUI: {fileID: 1916997955}
   healthBar: {fileID: 1941190704}
 --- !u!1 &977507371
 GameObject:
@@ -13474,7 +13476,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   dot: {fileID: 272899890}
-  dotHighlightColor: {r: 0.8301887, g: 0.14489143, b: 0.14489143, a: 0}
+  dotHighlightColor: {r: 0.8301887, g: 0.14489143, b: 0.14489143, a: 1}
 --- !u!1 &1116108283
 GameObject:
   m_ObjectHideFlags: 0
