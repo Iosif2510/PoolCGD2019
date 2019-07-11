@@ -19,7 +19,7 @@ public class Spawner : MonoBehaviour
     int currentWaveNumber;
 
     int enemiesRemainingToSpawn;
-    int enemiesRemainingAlive;
+    public int enemiesRemainingAlive { get; private set; }
     float nextSpawnTime;
 
     MapGenerator map;
