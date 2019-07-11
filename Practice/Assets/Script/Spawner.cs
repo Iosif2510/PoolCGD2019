@@ -11,6 +11,10 @@ public class Spawner : MonoBehaviour
     LivingEntity playerEntity;
     Transform playerT;
 
+    public enum ColorState { Red, Blue, Green, Magenta, Cyan, Yellow, Null };
+    public ParticleSystem[] deathParticles;
+    public Dictionary<ColorState, ParticleSystem> deathParticlesDict = new Dictionary<ColorState, ParticleSystem>();
+
     Wave currentWave;
     int currentWaveNumber;
 
@@ -20,7 +24,7 @@ public class Spawner : MonoBehaviour
 
     MapGenerator map;
 
-    float timeBtwCampingChecks = 2;
+    float timeBtwCampingChecks = 3;
     float campThresholdDistance = 1.5f; 
     float nextCampCheckTime;
     Vector3 campPositionOld;
@@ -37,6 +41,34 @@ public class Spawner : MonoBehaviour
         nextCampCheckTime = timeBtwCampingChecks + Time.time;
         campPositionOld = playerT.position;
         playerEntity.OnDeath += OnPlayerDeath;
+
+        foreach (ParticleSystem deathParticle in deathParticles) {
+            ColorState particleColorState;
+            switch (deathParticle.name) {
+                case "Red Death Effect":
+                    particleColorState = ColorState.Red;
+                    break;
+                case "Green Death Effect":
+                    particleColorState = ColorState.Green;
+                    break;
+                case "Blue Death Effect":
+                    particleColorState = ColorState.Blue;
+                    break;
+                case "Magenta Death Effect":
+                    particleColorState = ColorState.Magenta;
+                    break;
+                case "Cyan Death Effect":
+                    particleColorState = ColorState.Cyan;
+                    break;
+                case "Yellow Death Effect":
+                    particleColorState = ColorState.Yellow;
+                    break;
+                default:
+                    particleColorState = ColorState.Null;
+                    break;
+            }
+            deathParticlesDict.Add(particleColorState, deathParticle);
+        }
 
         map = FindObjectOfType<MapGenerator>();
         NextWave();
@@ -82,12 +114,15 @@ public class Spawner : MonoBehaviour
 
         Material tileMat = spawnTile.GetComponent<Renderer>().material;
         Color initialColor = Color.white;
-        Color flashColor = Color.red; //todo 적의 색에 맞춰 스폰 색깰을 바꿀 것
+
+        int chooseEnemy = Random.Range(0, currentWave.colorsToSpawn.Length);
+        ColorState enemyColorState = currentWave.colorsToSpawn[chooseEnemy];
+        Color enemyColor = ReturnColor(enemyColorState); //적의 색깔과 스폰 장소 색깔을 결정
         float spawnTimer = 0;
 
         while(spawnTimer < spawnDelay) {
 
-            tileMat.color = Color.Lerp(initialColor, flashColor, Mathf.PingPong(spawnTimer * tileFlashSpeed, 1));
+            tileMat.color = Color.Lerp(initialColor, enemyColor, Mathf.PingPong(spawnTimer * tileFlashSpeed, 1));
 
             spawnTimer += Time.deltaTime;
             yield return null;
@@ -95,9 +130,30 @@ public class Spawner : MonoBehaviour
 
         Enemy spawnedEnemy = Instantiate(enemy, spawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
         spawnedEnemy.OnDeath += OnEnemyDeath;
-        spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
+        if (deathParticlesDict.ContainsKey(enemyColorState)) {
+            spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, enemyColor, deathParticlesDict[enemyColorState]);
+        }
 
         if (tileMat.color != initialColor) tileMat.color = initialColor;
+    }
+
+    Color ReturnColor(ColorState colorState) {
+        switch(colorState) {
+            case ColorState.Red:
+                return new Color(1, 0, 0, 1);
+            case ColorState.Blue:
+                return new Color(0, 0, 1, 1);
+            case ColorState.Green:
+                return new Color(0, 1, 0, 1);
+            case ColorState.Magenta:
+                return new Color(1, 0, 1, 1);
+            case ColorState.Yellow:
+                return new Color(1, 1, 0, 1);
+            case ColorState.Cyan:
+                return new Color(0, 1, 1, 1);
+            default:
+                return new Color(0, 0, 0, 0);
+        }
     }
 
     void OnPlayerDeath() {
@@ -145,6 +201,6 @@ public class Spawner : MonoBehaviour
         public float moveSpeed;
         public int hitsToKillPlayer;
         public float enemyHealth;
-        public Color skinColor;
+        public ColorState[] colorsToSpawn;
    }
 }

@@ -2529,41 +2529,48 @@ MonoBehaviour:
   devMode: 1
   waves:
   - infinite: 0
-    enemyCount: 15
+    enemyCount: 5
     timeBetweenSpawns: 1
     moveSpeed: 2
     hitsToKillPlayer: 5
     enemyHealth: 1
-    skinColor: {r: 1, g: 0, b: 0, a: 0}
+    colorsToSpawn: 0000000005000000
   - infinite: 0
     enemyCount: 40
     timeBetweenSpawns: 0.75
     moveSpeed: 2.2
     hitsToKillPlayer: 4
     enemyHealth: 1
-    skinColor: {r: 0, g: 0.60645056, b: 1, a: 0}
+    colorsToSpawn: 0100000004000000
   - infinite: 0
     enemyCount: 60
     timeBetweenSpawns: 0.6
     moveSpeed: 2.5
     hitsToKillPlayer: 3
     enemyHealth: 2
-    skinColor: {r: 0, g: 1, b: 0.060156345, a: 0}
+    colorsToSpawn: 020000000400000005000000
   - infinite: 0
     enemyCount: 70
     timeBetweenSpawns: 0.6
     moveSpeed: 3
     hitsToKillPlayer: 3
     enemyHealth: 2
-    skinColor: {r: 0.64615107, g: 0, b: 1, a: 0}
+    colorsToSpawn: 00000000030000000100000004000000
   - infinite: 1
     enemyCount: -1
     timeBetweenSpawns: 0.5
     moveSpeed: 4
     hitsToKillPlayer: 1
     enemyHealth: 3
-    skinColor: {r: 1, g: 0, b: 0.8579731, a: 0}
+    colorsToSpawn: 000000000200000001000000030000000400000005000000
   enemy: {fileID: 2753646212322466918, guid: 7f3b4c54a8c1e4ddeabc2bf002423f00, type: 3}
+  deathParticles:
+  - {fileID: 3120143630414091388, guid: 9cba66ad7d480405aa10f17d8ad8b6d7, type: 3}
+  - {fileID: 3120143630414091388, guid: 13b5f23f35b9e49a6868b0a8d5554041, type: 3}
+  - {fileID: 3120143630414091388, guid: 77b0787813c7e472e8267e6668b3aa6a, type: 3}
+  - {fileID: 3120143630414091388, guid: ecc9d5e6694604274b02b46d445d8680, type: 3}
+  - {fileID: 3120143630414091388, guid: 89a9014eebec44984af9095ced779701, type: 3}
+  - {fileID: 3120143630414091388, guid: 1524d3b88f0d44d88a70eece1b37e9cc, type: 3}
 --- !u!4 &172184276
 Transform:
   m_ObjectHideFlags: 0

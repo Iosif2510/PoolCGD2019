@@ -5,23 +5,21 @@ using UnityEngine.AI;
 
 public class Enemy : LivingEntity
 {
-    public enum State {
-        Idle,
-        Chasing,
-        Attacking
-    };
+    public enum State { Idle, Chasing, Attacking };
     State currentState;
 
     public ParticleSystem deathEffect;
     public static event System.Action OnDeathStatic;
 
-    ParticleSystem.MainModule deathEffectMain;
+    public Color ownColor;
+
+    //ParticleSystem.MainModule deathEffectMain;
     NavMeshAgent pathfinder;
     Material skinMaterial;
     Transform target;
     LivingEntity targetEntity;
 
-    float attackDistanceThreshold = .5f;
+    float attackDistanceThreshold = .3f;
     float timeBetweenAttacks = 1;
     int damage;
 
@@ -38,7 +36,8 @@ public class Enemy : LivingEntity
 
     void Awake() {
         pathfinder = GetComponent<NavMeshAgent>();
-        deathEffectMain = deathEffect.main;
+
+        skinMaterial = GetComponent<Renderer>().material;
 
         if (GameObject.FindGameObjectWithTag("Player") != null) {
             hasTarget = true;
@@ -69,7 +68,7 @@ public class Enemy : LivingEntity
         if (damage >= health) {
             if (OnDeathStatic != null) OnDeathStatic();
             AudioManager.instance.PlaySound("Enemy Death", transform.position);
-            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffectMain.startLifetime.constant);
+            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
         }
 
         base.TakeHit(damage, hitPoint, hitDirection);
@@ -94,16 +93,16 @@ public class Enemy : LivingEntity
         }
     }
 
-    public void SetCharacteristics(float moveSpeed, float hitsToKillPlayer, float enemyHealth, Color skinColor) {
+    public void SetCharacteristics(float moveSpeed, float hitsToKillPlayer, float enemyHealth, Color skinColor, ParticleSystem _deathEffect) {
         pathfinder.speed = moveSpeed;
         if (hasTarget) {
             damage = (int)Mathf.Ceil(targetEntity.startingHealth / hitsToKillPlayer);
         }
         startingHealth = enemyHealth;
 
-        deathEffectMain.startColor = new Color(skinColor.r, skinColor.g, skinColor.b, 1);
-        skinMaterial = GetComponent<Renderer>().material;
-        skinMaterial.color = skinColor;
+        ownColor = new Color(skinColor.r, skinColor.g, skinColor.b, 1);
+        deathEffect = _deathEffect;
+        skinMaterial.color = ownColor;
     }
 
     protected override void Die() {
