@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
 
     public Wave[] waves;
     public Enemy enemy;
+    public EnemyHealthBar enemyHealthBar;
     LivingEntity playerEntity;
     Transform playerT;
 
@@ -19,7 +20,7 @@ public class Spawner : MonoBehaviour
     int currentWaveNumber;
 
     int enemiesRemainingToSpawn;
-    int enemiesRemainingAlive;
+    public int enemiesRemainingAlive { get; private set; }
     float nextSpawnTime;
 
     MapGenerator map;
@@ -97,7 +98,10 @@ public class Spawner : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Return)) {
                 StopCoroutine("SpawnEnemy");
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>()) {
-                    GameObject.Destroy(enemy.gameObject);
+                    Destroy(enemy.gameObject);
+                }
+                foreach (EnemyHealthBar enemyHB in FindObjectsOfType<EnemyHealthBar>()) {
+                    Destroy(enemyHB.gameObject);
                 }
                 NextWave();
             }
@@ -133,6 +137,9 @@ public class Spawner : MonoBehaviour
         if (deathParticlesDict.ContainsKey(enemyColorState)) {
             spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, enemyColor, deathParticlesDict[enemyColorState]);
         }
+
+        EnemyHealthBar spawnedEnemyHealthBar = Instantiate(enemyHealthBar, spawnedEnemy.transform.position + EnemyHealthBar.initialPosition, Quaternion.identity) as EnemyHealthBar;
+        spawnedEnemyHealthBar.SetEnemy(spawnedEnemy);
 
         if (tileMat.color != initialColor) tileMat.color = initialColor;
     }
