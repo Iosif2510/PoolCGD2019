@@ -14,7 +14,10 @@ public class Player : LivingEntity
     GunController gunController;
     Camera ViewCamera;
 
-    void Awake() {
+    protected override void Awake() {
+
+        base.Awake();
+
         controller = GetComponent<PlayerController>();
         gunController = GetComponent<GunController>();
         ViewCamera = Camera.main;
@@ -27,7 +30,7 @@ public class Player : LivingEntity
 
     void OnNewWave(int waveNumber) {
         health = startingHealth;
-        gunController.EquipGun(waveNumber - 1);
+        gunController.EquipGun(waveNumber - 1, skinMaterial.color);
     }
 
     protected override void Die() {
@@ -70,6 +73,24 @@ public class Player : LivingEntity
         if (transform.position.y < -10) {
             TakeDamage(health);
         }
+
+        // Color Change Input (Temporary)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            skinMaterial.color = Color.red;
+            gunController.SetGunOwnerColor(Color.red);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            skinMaterial.color = Color.green;
+            gunController.SetGunOwnerColor(Color.green);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            skinMaterial.color = Color.blue;
+            gunController.SetGunOwnerColor(Color.blue);
+        }
+        
 
     }
 

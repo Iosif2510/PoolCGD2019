@@ -22,6 +22,8 @@ public class Gun : MonoBehaviour
     public int bulletAmount = 30;
     int index;
 
+    public Color ownerColor;
+
     [Header("Recoil")]
     public Vector2 kickMinMax = new Vector2(.05f, 2f);
     public Vector2 recoilAngleMinMax = new Vector2(3,5);
@@ -98,6 +100,7 @@ public class Gun : MonoBehaviour
 
                     bullets[i, index].transform.position = projectileSpawn[i].position;
                     bullets[i, index].transform.rotation = projectileSpawn[i].rotation;
+                    bullets[i, index].SetOwnerColor(ownerColor);
                     bullets[i, index].gameObject.SetActive(true);
 
                 }

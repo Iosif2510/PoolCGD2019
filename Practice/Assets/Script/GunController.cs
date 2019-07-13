@@ -10,18 +10,24 @@ public class GunController : MonoBehaviour
 
     void Start() {
         if (allGuns[0] != null) {
-            EquipGun(allGuns[0]);
+            EquipGun(allGuns[0], gameObject.GetComponent<Renderer>().material.color);
         } 
     }
 
-    public void EquipGun(Gun gunToEquip) {
+    public void EquipGun(Gun gunToEquip, Color ownerColor) {
         if (equippedGun != null)  Destroy(equippedGun.gameObject);
         equippedGun = Instantiate(gunToEquip, weaponHold.position, weaponHold.rotation) as Gun;
         equippedGun.transform.parent = weaponHold;
+        equippedGun.ownerColor = ownerColor;
     }
 
-    public void EquipGun(int weponIndex) {
-        EquipGun(allGuns[weponIndex]);
+    public void EquipGun(int weponIndex, Color ownerColor) {
+        EquipGun(allGuns[weponIndex], ownerColor);
+    }
+
+    public void SetGunOwnerColor(Color c)
+    {
+        equippedGun.ownerColor = c;
     }
 
     public void OnTriggerHold() {

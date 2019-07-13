@@ -15,7 +15,7 @@ public class Enemy : LivingEntity
 
     //ParticleSystem.MainModule deathEffectMain;
     NavMeshAgent pathfinder;
-    Material skinMaterial;
+    //Material skinMaterial;
     Transform target;
     LivingEntity targetEntity;
 
@@ -34,10 +34,11 @@ public class Enemy : LivingEntity
     todo GetComponent<Renderer>().material.color
     */
 
-    void Awake() {
-        pathfinder = GetComponent<NavMeshAgent>();
+    protected override void Awake() {
 
-        skinMaterial = GetComponent<Renderer>().material;
+        base.Awake();
+
+        pathfinder = GetComponent<NavMeshAgent>();
 
         if (GameObject.FindGameObjectWithTag("Player") != null) {
             hasTarget = true;
@@ -72,6 +73,12 @@ public class Enemy : LivingEntity
         }
 
         base.TakeHit(damage, hitPoint, hitDirection);
+    }
+
+    public override void TakeHit(Color attackerColor, Vector3 hitPoint, Vector3 hitDirection)
+    {
+        // Need Death Effect
+        base.TakeHit(attackerColor, hitPoint, hitDirection);
     }
 
     void OnTargetDeath() {
