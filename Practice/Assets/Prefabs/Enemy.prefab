@@ -109,6 +109,8 @@ MonoBehaviour:
   startingHealth: 3
   deathEffect: {fileID: 3120143630414091388, guid: 9cba66ad7d480405aa10f17d8ad8b6d7,
     type: 3}
+  whiteDeathEffect: {fileID: 8192283611856905039, guid: 7b09bebe7f1c1ed40ae57edd9fc8ce51,
+    type: 3}
   ownColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!195 &2753646212322466921
 NavMeshAgent:

@@ -9,6 +9,7 @@ public class Enemy : LivingEntity
     State currentState;
 
     public ParticleSystem deathEffect;
+    public WhiteDeathEffect whiteDeathEffect;
     public static event System.Action OnDeathStatic;
 
     public Color ownColor;
@@ -77,7 +78,13 @@ public class Enemy : LivingEntity
 
     public override void TakeHit(Color attackerColor, Vector3 hitPoint, Vector3 hitDirection)
     {
-        // Need Death Effect
+        AudioManager.instance.PlaySound("Impact", transform.position);
+        if (MergeColor(skinMaterial.color, attackerColor) == Color.white)
+        { //Death Effect
+            if (OnDeathStatic != null) OnDeathStatic();
+            AudioManager.instance.PlaySound("Enemy Death", transform.position);
+            Destroy(Instantiate(whiteDeathEffect.gameObject, transform.position, Quaternion.identity) as GameObject, whiteDeathEffect.GetComponent<WhiteDeathEffect>().fadeOutTime);
+        }
         base.TakeHit(attackerColor, hitPoint, hitDirection);
     }
 

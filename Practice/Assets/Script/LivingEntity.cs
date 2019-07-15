@@ -42,7 +42,7 @@ public class LivingEntity : MonoBehaviour, IDamageable {
         if (skinMaterial.color == Color.white) Die();
     }
 
-    public Color MergeColor(Color c1, Color c2)
+    public static Color MergeColor(Color c1, Color c2)
     {
         float rValue = c1.r + c2.r;
         if (rValue > 1) rValue = 0;
