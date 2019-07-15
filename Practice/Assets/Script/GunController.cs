@@ -15,13 +15,13 @@ public class GunController : MonoBehaviour
     }
 
     public void EquipGun(Gun gunToEquip) {
-        if (equippedGun != null)  Destroy(equippedGun.gameObject);
+        if (equippedGun != null) Destroy(equippedGun.gameObject);
         equippedGun = Instantiate(gunToEquip, weaponHold.position, weaponHold.rotation) as Gun;
         equippedGun.transform.parent = weaponHold;
     }
 
-    public void EquipGun(int weponIndex) {
-        EquipGun(allGuns[weponIndex]);
+    public void EquipGun(int weaponIndex) {
+        EquipGun(allGuns[weaponIndex]);
     }
 
     public void OnTriggerHold() {

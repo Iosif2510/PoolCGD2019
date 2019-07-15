@@ -46,9 +46,12 @@ public class GameUI : MonoBehaviour
     void OnNewWave(int waveNumber) {
         string[] numbers = {"One", "Two", "Three", "Four", "Five"};
         newWaveTitle.text = $"- Wave {numbers[waveNumber - 1]} -";
-        if (waveNumber == spawner.waves.Length) newWaveEnemyCount.text = "Enemies: Infinite";
+        if (waveNumber == spawner.waves.Length) {
+            newWaveEnemyCount.text = "Enemies: Infinite";
+            currentEnemyLeftUI.gameObject.SetActive(false);
+        } 
         else newWaveEnemyCount.text = $"Enemies: {spawner.waves[waveNumber - 1].enemyCount}";
-
+        
         StopCoroutine("AnimateNewWaveBanner");
         StartCoroutine("AnimateNewWaveBanner");
     } 

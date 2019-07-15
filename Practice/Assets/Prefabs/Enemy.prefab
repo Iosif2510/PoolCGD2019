@@ -109,6 +109,7 @@ MonoBehaviour:
   startingHealth: 3
   deathEffect: {fileID: 3120143630414091388, guid: 9cba66ad7d480405aa10f17d8ad8b6d7,
     type: 3}
+  gunItem: {fileID: 541812804097702703, guid: e55b8f1fc407fcd4fbe5174cdb957ee5, type: 3}
   ownColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!195 &2753646212322466921
 NavMeshAgent:

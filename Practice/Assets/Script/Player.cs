@@ -27,7 +27,7 @@ public class Player : LivingEntity
 
     void OnNewWave(int waveNumber) {
         health = startingHealth;
-        gunController.EquipGun(waveNumber - 1);
+        gunController.EquipGun(0);
     }
 
     protected override void Die() {

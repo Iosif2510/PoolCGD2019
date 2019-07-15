@@ -11,6 +11,9 @@ public class Enemy : LivingEntity
     public ParticleSystem deathEffect;
     public static event System.Action OnDeathStatic;
 
+    public GunController gunController;
+    public GunItem gunItem;
+
     public Color ownColor;
 
     //ParticleSystem.MainModule deathEffectMain;
@@ -57,6 +60,7 @@ public class Enemy : LivingEntity
         if (hasTarget) {
             currentState = State.Chasing;
             targetEntity.OnDeath += OnTargetDeath;
+            gunController = target.GetComponent<GunController>();
 
             StartCoroutine(UpdatePath());
         }
@@ -106,6 +110,13 @@ public class Enemy : LivingEntity
     }
 
     protected override void Die() {
+        if (Random.Range(0, 3) == 0) { //spawn gun item by chance
+            GunItem spawnedGunItem = Instantiate(gunItem, transform.position, Quaternion.identity) as GunItem;
+            Debug.Log("Item spawned");
+            int randomItemIndex = (int)Random.Range(1,gunController.allGuns.Length);
+            Debug.Log(randomItemIndex);
+            spawnedGunItem.SetGunItem(randomItemIndex);
+        }
         base.Die();
     }
 

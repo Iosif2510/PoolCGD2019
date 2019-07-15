@@ -207,6 +207,7 @@ public class Spawner : MonoBehaviour
 
         public float moveSpeed;
         public int hitsToKillPlayer;
+        public int gunDropChance;
         public float enemyHealth;
         public ColorState[] colorsToSpawn;
    }
