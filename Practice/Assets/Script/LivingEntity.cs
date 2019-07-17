@@ -44,12 +44,12 @@ public class LivingEntity : MonoBehaviour, IDamageable {
 
     public static Color MergeColor(Color c1, Color c2)
     {
+        if((c1.r == 1 && c2.r == 1) || (c1.g == 1 && c2.g == 1) || (c1.b == 1 && c2.b == 1))
+            return c1;
+
         float rValue = c1.r + c2.r;
-        if (rValue > 1) rValue = 0;
         float gValue = c1.g + c2.g;
-        if (gValue > 1) gValue = 0;
         float bValue = c1.b + c2.b;
-        if (bValue > 1) bValue = 0;
 
         return new Color(rValue, gValue, bValue);
     }
