@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunItem : MonoBehaviour
+public class GunItem : Item
 {
     int maxGunNum;
     int gunNum;
     public Texture[] textures;
-    public float rotateSpeed = 20;
-    public float timeToDisappear = 5.0f;
 
-    void Start()
+    protected override void Start()
     {
-        Destroy(gameObject, timeToDisappear);
+        base.Start();
     }
-    void Update()
+    protected override void Update()
     {
-        transform.Rotate(Vector3.up, Time.deltaTime * rotateSpeed);
+        base.Update();
     }
     public void SetGunItem(int _gunNum)
     {
