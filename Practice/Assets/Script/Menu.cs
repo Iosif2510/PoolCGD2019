@@ -9,6 +9,7 @@ public class Menu : MonoBehaviour
 
     public GameObject mainMenuHolder;
     public GameObject optionMenuHolder;
+    public GameObject selectMenuHolder;
 
     public Slider[] volumeSliders;
     public Toggle[] resolutionToggles;
@@ -32,7 +33,16 @@ public class Menu : MonoBehaviour
     }
 
     public void Play() {
-        SceneManager.LoadScene("Game");
+        mainMenuHolder.SetActive(false);
+        selectMenuHolder.SetActive(true);
+    }
+
+    public void PlayTutorial() {
+        SceneManager.LoadScene("Tutorial");
+    }
+
+    public void PlayInfinite() {
+        SceneManager.LoadScene("Infinite");
     }
 
     public void Quit() {
@@ -44,6 +54,7 @@ public class Menu : MonoBehaviour
     }
 
     public void MainMenu() {
+        selectMenuHolder.SetActive(false);
         optionMenuHolder.SetActive(false);
         mainMenuHolder.SetActive(true);
     }
