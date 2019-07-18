@@ -119,13 +119,13 @@ public class Gun : MonoBehaviour
             recoilAngle += Random.Range(recoilAngleMinMax.x, recoilAngleMinMax.y);
             recoilAngle = Mathf.Clamp(recoilAngle, 0, 30);
 
-            AudioManager.instance.PlaySound(shootAudio, transform.position);
+            AudioManager.Instance.PlaySound(shootAudio, transform.position);
         }
     }
 
     public void Reload() {
         if (!isReloading && projectilesRemainingInMag != projectilesPerMag) {
-            AudioManager.instance.PlaySound(reloadAudio, transform.position);
+            AudioManager.Instance.PlaySound(reloadAudio, transform.position);
             StartCoroutine(AnimateReload());
             }
     }

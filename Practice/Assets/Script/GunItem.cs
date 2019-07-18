@@ -27,7 +27,7 @@ public class GunItem : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             other.GetComponent<GunController>().EquipGun(gunNum, other.GetComponent<Renderer>().material.color);
-            AudioManager.instance.PlaySound(reloadSounds[gunNum], transform.position);
+            AudioManager.Instance.PlaySound(reloadSounds[gunNum], transform.position);
             Destroy(gameObject);
         }
     }

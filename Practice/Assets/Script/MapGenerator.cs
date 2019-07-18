@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
+    private static MapGenerator instance;
+    public static MapGenerator Instance {
+        get { return instance; }
+    }
+
+    public enum GameMode { Tutorial, Infinite, Scenario };
+    public GameMode currentMode;
+
     public Map[] maps;
     public int mapIndex;
 
@@ -27,17 +35,35 @@ public class MapGenerator : MonoBehaviour
     Map currentMap;
 
     void Awake() {
+        if (instance != null && instance != this) {
+            Destroy(this.gameObject);
+        } 
+        else {
+            instance = this;
+        }
         FindObjectOfType<Spawner>().OnNewWave += OnNewWave;
+        mapIndex = 0;
     }
 
     void OnNewWave(int waveNumber) {
-        mapIndex = waveNumber - 1;
-        GenerateMap();
+        if (waveNumber <= maps.Length) {
+            mapIndex = waveNumber - 1;
+            GenerateMap(maps[mapIndex]);
+        }
+        else if (currentMode == GameMode.Infinite) {
+            mapIndex = -1;
+            System.Random mapRand = new System.Random((int)Time.time);
+            Coord mapSize = new Coord(mapRand.Next(15, (int)maxMapSize.x - 1), mapRand.Next(15, (int)maxMapSize.y - 1));
+            Debug.Log($"Mapsize: {mapSize.x}, {mapSize.y}");
+            float obstaclePercent = (float)mapRand.NextDouble() * 0.4f;
+            Map newMap = new Map(mapSize, obstaclePercent, mapRand.Next());
+            GenerateMap(newMap);
+        } // Infinite mode 정해진 맵 목록 이후 랜덤 맵 출현
     }
 
-    public void GenerateMap() {
+    public void GenerateMap(Map _map) {
 
-        currentMap = maps[mapIndex];
+        currentMap = _map;
         tileMap = new Transform[currentMap.mapSize.x, currentMap.mapSize.y];
         System.Random prng = new System.Random(currentMap.seed);
 
@@ -239,6 +265,19 @@ public class MapGenerator : MonoBehaviour
             get {
                 return new Coord(mapSize.x/2, mapSize.y/2);
             }
+        }
+
+        public Map() {
+            minObstacleHeight = 1;
+            maxObstacleHeight = 3;
+        }
+
+        public Map(Coord _mapSize, float _obstaclePercent, int _seed) { //Generating Random Map
+            mapSize = _mapSize;
+            obstaclePercent = _obstaclePercent;
+            seed = _seed;
+            minObstacleHeight = 1;
+            maxObstacleHeight = 3;        
         }
     }
 }
