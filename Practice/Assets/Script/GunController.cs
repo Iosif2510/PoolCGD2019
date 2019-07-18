@@ -29,7 +29,6 @@ public class GunController : MonoBehaviour
     {
         equippedGun.ownerColor = c;
     }
-
     public void OnTriggerHold() {
         if (equippedGun != null) equippedGun.OnTriggerHold();
     }

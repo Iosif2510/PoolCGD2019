@@ -104,11 +104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c486b0de6d9c22a42be98758d52e9530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reloadSounds:
-  - {fileID: 8300000, guid: 0a8071705a91241d7bfe488a2f30620f, type: 3}
-  - {fileID: 8300000, guid: 6e025827e286846e0a168b83c44f20aa, type: 3}
-  - {fileID: 8300000, guid: f6813b79839414c8c83dd4cd03fb4b8a, type: 3}
   textures:
   - {fileID: 0}
   - {fileID: 2800000, guid: 8d5dedbe4cd819a44aea3a49586f1f30, type: 3}
   - {fileID: 2800000, guid: e724c42bb67603a4db16b7371c75507e, type: 3}
+  rotateSpeed: 40
+  timeToDisappear: 5
