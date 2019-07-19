@@ -16,6 +16,9 @@ public class Spawner : MonoBehaviour
     public ParticleSystem[] deathParticles;
     public Dictionary<ColorState, ParticleSystem> deathParticlesDict = new Dictionary<ColorState, ParticleSystem>();
 
+    public GunController gunController;
+    public GunItem gunItem;
+
     public Wave currentWave {
         get; private set;
     }
@@ -40,6 +43,7 @@ public class Spawner : MonoBehaviour
     void Start() {
         playerEntity = FindObjectOfType<Player>();
         playerT = playerEntity.transform;
+        gunController = playerEntity.GetComponent<GunController>();
 
         nextCampCheckTime = timeBtwCampingChecks + Time.time;
         campPositionOld = playerT.position;
@@ -135,7 +139,7 @@ public class Spawner : MonoBehaviour
         }
 
         Enemy spawnedEnemy = Instantiate(enemy, spawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
-        spawnedEnemy.OnDeath += OnEnemyDeath;
+        spawnedEnemy.OnDeathPosition += OnEnemyDeath;
         if (deathParticlesDict.ContainsKey(enemyColorState)) {
             spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, enemyColor, deathParticlesDict[enemyColorState]);
         }
@@ -169,21 +173,21 @@ public class Spawner : MonoBehaviour
         isDisabled = true;
     }
 
-    void OnEnemyDeath() {
+    void OnEnemyDeath(Vector3 _position) {
         enemiesRemainingAlive--;
         
+        if ((gunController != null) && (Random.Range(0f, 1f) < currentWave.gunDropChance)) { //spawn gun item by chance
+            GunItem spawnedGunItem = Instantiate(gunItem, _position, Quaternion.identity) as GunItem;
+            //Debug.Log("Item spawned");
+            int randomItemIndex = (int)Random.Range(1,gunController.allGuns.Length);
+            //Debug.Log(randomItemIndex);
+            spawnedGunItem.SetGunItem(randomItemIndex);
+        }
         if (enemiesRemainingAlive == 0) NextWave();
     }
 
     void ResetPlayerPosition() {
         playerT.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up * 3;
-    }
-
-    void SpawnAllColor(Wave _wave) {
-        _wave.colorsToSpawn = new ColorState[6];
-        for (int i = 0; i < 6; i++) {
-            _wave.colorsToSpawn[i] = (ColorState)(i+1);
-        }
     }
 
     void NextWave() {
@@ -194,24 +198,28 @@ public class Spawner : MonoBehaviour
         }
 
         if (currentWaveNumber - 1 < waves.Length) {
-            print("Prefixed Wave: " + currentWaveNumber);
+            //print("Prefixed Wave: " + currentWaveNumber);
             currentWave = waves[currentWaveNumber - 1];
         }
         
         else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
-            print("Random Wave: " + currentWaveNumber);
+            //print("Random Wave: " + currentWaveNumber);
             System.Random psrd = new System.Random();
             currentWave = new Wave();
             int minSpawn = Mathf.Min(waves[waves.Length - 1].enemyCount + (currentWaveNumber - waves.Length) * 10, 200);
             int maxSpawn = Mathf.Min(waves[waves.Length - 1].enemyCount  + (currentWaveNumber - waves.Length) * 10 + 50, 200) + 1;
             currentWave.enemyCount = psrd.Next(minSpawn, maxSpawn);
 
+            /*
             currentWave.timeBetweenSpawns = 1f;
             currentWave.moveSpeed = 3;
-            currentWave.gunDropChance = 20;
+            currentWave.gunDropChance = 0.03f;
             currentWave.hitsToKillPlayer = 5;
-            
-            SpawnAllColor(currentWave);
+            */
+
+            currentWave.SetWaveProperty(1f, 3, 0.03f, 5);
+            currentWave.SpawnAllColor();
+            //print($"Gun Drop Chance: {currentWave.gunDropChance}");
         }
 
         else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
@@ -237,7 +245,22 @@ public class Spawner : MonoBehaviour
 
         public float moveSpeed;
         public int hitsToKillPlayer;
-        public int gunDropChance;
+        [Range(0,1)]
+        public float gunDropChance;
         public ColorState[] colorsToSpawn;
+
+        public void SetWaveProperty(float _timeBtwSpawns, float _movSpeed, float _gunDropChance, int _hitsToKillPlayer) {
+            timeBetweenSpawns = _timeBtwSpawns;
+            moveSpeed = _movSpeed;
+            gunDropChance = _gunDropChance;
+            hitsToKillPlayer = _hitsToKillPlayer;
+        }
+
+        public void SpawnAllColor() {
+            colorsToSpawn = new ColorState[6];
+            for (int i = 0; i < 6; i++) {
+                colorsToSpawn[i] = (ColorState)(i+1);
+            }
+        }
    }
 }

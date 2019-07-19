@@ -12,9 +12,6 @@ public class Enemy : LivingEntity
     public WhiteDeathEffect whiteDeathEffect;
     public static event System.Action OnDeathStatic;
 
-    public GunController gunController;
-    public GunItem gunItem;
-
     public Color ownColor;
 
     //ParticleSystem.MainModule deathEffectMain;
@@ -65,13 +62,13 @@ public class Enemy : LivingEntity
         if (hasTarget) {
             currentState = State.Chasing;
             targetEntity.OnDeath += OnTargetDeath;
-            gunController = target.GetComponent<GunController>();
 
             StartCoroutine(UpdatePath());
         }
 
     }
 
+    /*
     public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection) {
         AudioManager.Instance.PlaySound("Impact", transform.position);
         if (damage >= health) { //Death Effect
@@ -82,6 +79,7 @@ public class Enemy : LivingEntity
 
         base.TakeHit(damage, hitPoint, hitDirection);
     }
+    */
 
     public override void TakeHit(Color attackerColor, Vector3 hitPoint, Vector3 hitDirection)
     {
@@ -126,13 +124,15 @@ public class Enemy : LivingEntity
     }
 
     protected override void Die() {
-        if (Random.Range(0, 3) == 0) { //spawn gun item by chance
+        /*
+        if (Random.Range(0, 10) == 0) { //spawn gun item by chance
             GunItem spawnedGunItem = Instantiate(gunItem, transform.position, Quaternion.identity) as GunItem;
             Debug.Log("Item spawned");
             int randomItemIndex = (int)Random.Range(1,gunController.allGuns.Length);
             Debug.Log(randomItemIndex);
             spawnedGunItem.SetGunItem(randomItemIndex);
         }
+        */
         base.Die();
     }
 

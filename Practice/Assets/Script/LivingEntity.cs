@@ -11,6 +11,7 @@ public class LivingEntity : MonoBehaviour, IDamageable {
     protected Material skinMaterial;
     
     public event System.Action OnDeath;
+    public event System.Action<Vector3> OnDeathPosition;
 
     protected virtual void Awake()
     {
@@ -60,6 +61,7 @@ public class LivingEntity : MonoBehaviour, IDamageable {
             dead = true;
             if (OnDeath != null) {
                 OnDeath();
+                OnDeathPosition(transform.position);
             }
             GameObject.Destroy(gameObject);
         } 

@@ -33,11 +33,12 @@ public class MapGenerator : MonoBehaviour
     Transform[,] tileMap;
 
     Map currentMap;
+    System.Random mapRand;
 
     void Awake() {
         if (instance != null && instance != this) {
             Destroy(this.gameObject);
-        } 
+        }
         else {
             instance = this;
         }
@@ -51,8 +52,8 @@ public class MapGenerator : MonoBehaviour
             GenerateMap(maps[mapIndex]);
         }
         else if (currentMode == GameMode.Infinite) {
-            mapIndex = -1;
-            System.Random mapRand = new System.Random((int)Time.time);
+            mapIndex++;
+            mapRand = new System.Random((int)Time.time + mapIndex);
             Coord mapSize = new Coord(mapRand.Next(15, (int)maxMapSize.x - 1), mapRand.Next(15, (int)maxMapSize.y - 1));
             Debug.Log($"Mapsize: {mapSize.x}, {mapSize.y}");
             float obstaclePercent = (float)mapRand.NextDouble() * 0.4f;
