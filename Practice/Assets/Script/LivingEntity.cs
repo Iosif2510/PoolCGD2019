@@ -61,6 +61,9 @@ public class LivingEntity : MonoBehaviour, IDamageable {
             dead = true;
             if (OnDeath != null) {
                 OnDeath();
+            }
+            if(OnDeathPosition != null)
+            {
                 OnDeathPosition(transform.position);
             }
             GameObject.Destroy(gameObject);
