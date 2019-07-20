@@ -29,7 +29,7 @@ public class GunItem : Item
         {
             GunController gunController = other.GetComponent<GunController>();
             gunController.EquipGun(gunNum, other.GetComponent<Renderer>().material.color);
-            AudioManager.instance.PlaySound(gunController.allGuns[gunNum].reloadAudio, transform.position);
+            AudioManager.Instance.PlaySound(gunController.allGuns[gunNum].reloadAudio, transform.position);
             Destroy(gameObject);
         }
     }

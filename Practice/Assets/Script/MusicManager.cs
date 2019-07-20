@@ -11,7 +11,7 @@ public class MusicManager : MonoBehaviour
     string sceneName;
 
     void Start() {
-        AudioManager.instance.PlayMusic(menuTheme, 2);
+        AudioManager.Instance.PlayMusic(menuTheme, 2);
     }
 
     void OnEnable() {
@@ -37,7 +37,7 @@ public class MusicManager : MonoBehaviour
         else if (sceneName == "Game") clipToPlay = mainTheme;
 
         if (clipToPlay != null) {
-            AudioManager.instance.PlayMusic(clipToPlay, 2);
+            AudioManager.Instance.PlayMusic(clipToPlay, 2);
             Invoke("PlayMusic", clipToPlay.length);
         }
     }

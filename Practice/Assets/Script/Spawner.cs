@@ -12,11 +12,20 @@ public class Spawner : MonoBehaviour
     LivingEntity playerEntity;
     Transform playerT;
 
-    public enum ColorState { Red, Blue, Green, Magenta, Cyan, Yellow, Null };
+    public enum ColorState { White = 0, Red, Blue, Green, Magenta, Cyan, Yellow };
     public ParticleSystem[] deathParticles;
     public Dictionary<ColorState, ParticleSystem> deathParticlesDict = new Dictionary<ColorState, ParticleSystem>();
 
-    Wave currentWave;
+    public GunController gunController;
+    public GunItem gunItem;
+
+    public Elevator elevator;
+    Vector3 elevatorPosition;
+    Elevator spawnedElevator;
+
+    public Wave currentWave {
+        get; private set;
+    }
     int currentWaveNumber;
 
     int enemiesRemainingToSpawn;
@@ -38,10 +47,19 @@ public class Spawner : MonoBehaviour
     void Start() {
         playerEntity = FindObjectOfType<Player>();
         playerT = playerEntity.transform;
+        gunController = playerEntity.GetComponent<GunController>();
 
         nextCampCheckTime = timeBtwCampingChecks + Time.time;
         campPositionOld = playerT.position;
         playerEntity.OnDeath += OnPlayerDeath;
+
+        map = FindObjectOfType<MapGenerator>();
+
+        /*
+        spawnedElevator = Instantiate(elevator, Vector3.zero, Quaternion.identity) as Elevator;
+        spawnedElevator.NextWave += NextWave;
+        spawnedElevator.gameObject.SetActive(false);
+        */
 
         foreach (ParticleSystem deathParticle in deathParticles) {
             ColorState particleColorState;
@@ -65,13 +83,12 @@ public class Spawner : MonoBehaviour
                     particleColorState = ColorState.Yellow;
                     break;
                 default:
-                    particleColorState = ColorState.Null;
+                    particleColorState = ColorState.White;
                     break;
             }
             deathParticlesDict.Add(particleColorState, deathParticle);
         }
 
-        map = FindObjectOfType<MapGenerator>();
         NextWave();
     }
 
@@ -86,7 +103,7 @@ public class Spawner : MonoBehaviour
             }
 
             //Spawn Enemy
-            if ((currentWave.infinite || enemiesRemainingToSpawn > 0) && Time.time > nextSpawnTime) {
+            if ((enemiesRemainingToSpawn > 0) && Time.time > nextSpawnTime) {
                 enemiesRemainingToSpawn--;
                 nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
 
@@ -133,9 +150,9 @@ public class Spawner : MonoBehaviour
         }
 
         Enemy spawnedEnemy = Instantiate(enemy, spawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
-        spawnedEnemy.OnDeath += OnEnemyDeath;
+        spawnedEnemy.OnDeathPosition += OnEnemyDeath;
         if (deathParticlesDict.ContainsKey(enemyColorState)) {
-            spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, enemyColor, deathParticlesDict[enemyColorState]);
+            spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, enemyColor, deathParticlesDict[enemyColorState]);
         }
 
         EnemyHealthBar spawnedEnemyHealthBar = Instantiate(enemyHealthBar, spawnedEnemy.transform.position + EnemyHealthBar.initialPosition, Quaternion.identity) as EnemyHealthBar;
@@ -167,10 +184,20 @@ public class Spawner : MonoBehaviour
         isDisabled = true;
     }
 
-    void OnEnemyDeath() {
+    void OnEnemyDeath(Vector3 _position) {
         enemiesRemainingAlive--;
         
-        if (enemiesRemainingAlive == 0) NextWave();
+        if ((gunController != null) && (Random.Range(0f, 1f) < currentWave.gunDropChance)) { //spawn gun item by chance
+            GunItem spawnedGunItem = Instantiate(gunItem, _position, Quaternion.identity) as GunItem;
+            //Debug.Log("Item spawned");
+            int randomItemIndex = (int)Random.Range(1,gunController.allGuns.Length);
+            //Debug.Log(randomItemIndex);
+            spawnedGunItem.SetGunItem(randomItemIndex);
+        }
+        if (enemiesRemainingAlive == 0) {
+            //todo enable elevator
+            spawnedElevator.gameObject.SetActive(true);
+        }
     }
 
     void ResetPlayerPosition() {
@@ -181,34 +208,81 @@ public class Spawner : MonoBehaviour
         currentWaveNumber++;
 
         if (currentWaveNumber > 1) {
-            AudioManager.instance.PlaySound2D("Level Complete");
+            AudioManager.Instance.PlaySound2D("Level Complete");
         }
 
         if (currentWaveNumber - 1 < waves.Length) {
-            print("Wave: " + currentWaveNumber);
+            //print("Prefixed Wave: " + currentWaveNumber);
             currentWave = waves[currentWaveNumber - 1];
-
-            enemiesRemainingToSpawn = currentWave.enemyCount;
-            enemiesRemainingAlive = enemiesRemainingToSpawn;
-
-            if (OnNewWave != null) {
-                OnNewWave(currentWaveNumber);
-            }
-            ResetPlayerPosition();
         }
+        
+        else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
+            //print("Random Wave: " + currentWaveNumber);
+            System.Random psrd = new System.Random();
+            currentWave = new Wave();
+            int minSpawn = Mathf.Min(waves[waves.Length - 1].enemyCount + (currentWaveNumber - waves.Length) * 10, 200);
+            int maxSpawn = Mathf.Min(waves[waves.Length - 1].enemyCount  + (currentWaveNumber - waves.Length) * 10 + 50, 200) + 1;
+            currentWave.enemyCount = psrd.Next(minSpawn, maxSpawn);
+
+            /*
+            currentWave.timeBetweenSpawns = 1f;
+            currentWave.moveSpeed = 3;
+            currentWave.gunDropChance = 0.03f;
+            currentWave.hitsToKillPlayer = 5;
+            */
+
+            currentWave.SetWaveProperty(1f, 3, 0.03f, 5);
+            currentWave.SpawnAllColor();
+            //print($"Gun Drop Chance: {currentWave.gunDropChance}");
+        }
+
+        else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
+            //todo Tutorial Clear!
+        }
+
+        enemiesRemainingToSpawn = currentWave.enemyCount;
+        enemiesRemainingAlive = enemiesRemainingToSpawn;
+
+        if (OnNewWave != null) {
+            OnNewWave(currentWaveNumber);
+        }
+
+        //* elevator spawn
+        if (spawnedElevator != null) {
+            spawnedElevator.NextWave -= NextWave;
+            Destroy(spawnedElevator.gameObject);
+        }
+        elevatorPosition = map.GetTileFromPosition(Vector3.zero).transform.position + new Vector3(0, -3, 0);
+        spawnedElevator = Instantiate(elevator, elevatorPosition, Quaternion.identity);
+        spawnedElevator.NextWave += NextWave;
+        spawnedElevator.gameObject.SetActive(false);
+        ResetPlayerPosition();
 
     }
 
     [System.Serializable]
     public class Wave {
-        public bool infinite;
         public int enemyCount;
         public float timeBetweenSpawns;
 
         public float moveSpeed;
         public int hitsToKillPlayer;
-        public int gunDropChance;
-        public float enemyHealth;
+        [Range(0,1)]
+        public float gunDropChance;
         public ColorState[] colorsToSpawn;
+
+        public void SetWaveProperty(float _timeBtwSpawns, float _movSpeed, float _gunDropChance, int _hitsToKillPlayer) {
+            timeBetweenSpawns = _timeBtwSpawns;
+            moveSpeed = _movSpeed;
+            gunDropChance = _gunDropChance;
+            hitsToKillPlayer = _hitsToKillPlayer;
+        }
+
+        public void SpawnAllColor() {
+            colorsToSpawn = new ColorState[6];
+            for (int i = 0; i < 6; i++) {
+                colorsToSpawn[i] = (ColorState)(i+1);
+            }
+        }
    }
 }

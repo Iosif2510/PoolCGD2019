@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance;
+    private static AudioManager instance;
+    public static AudioManager Instance {
+        get { return instance; }
+    }
 
     public enum AudioChannel {Master, Sfx, Music};
 
