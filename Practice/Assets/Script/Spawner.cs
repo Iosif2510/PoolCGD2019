@@ -19,6 +19,10 @@ public class Spawner : MonoBehaviour
     public GunController gunController;
     public GunItem gunItem;
 
+    public Elevator elevator;
+    Vector3 elevatorPosition;
+    Elevator spawnedElevator;
+
     public Wave currentWave {
         get; private set;
     }
@@ -49,6 +53,14 @@ public class Spawner : MonoBehaviour
         campPositionOld = playerT.position;
         playerEntity.OnDeath += OnPlayerDeath;
 
+        map = FindObjectOfType<MapGenerator>();
+
+        /*
+        spawnedElevator = Instantiate(elevator, Vector3.zero, Quaternion.identity) as Elevator;
+        spawnedElevator.NextWave += NextWave;
+        spawnedElevator.gameObject.SetActive(false);
+        */
+
         foreach (ParticleSystem deathParticle in deathParticles) {
             ColorState particleColorState;
             switch (deathParticle.name) {
@@ -77,7 +89,6 @@ public class Spawner : MonoBehaviour
             deathParticlesDict.Add(particleColorState, deathParticle);
         }
 
-        map = FindObjectOfType<MapGenerator>();
         NextWave();
     }
 
@@ -183,7 +194,10 @@ public class Spawner : MonoBehaviour
             //Debug.Log(randomItemIndex);
             spawnedGunItem.SetGunItem(randomItemIndex);
         }
-        if (enemiesRemainingAlive == 0) NextWave();
+        if (enemiesRemainingAlive == 0) {
+            //todo enable elevator
+            spawnedElevator.gameObject.SetActive(true);
+        }
     }
 
     void ResetPlayerPosition() {
@@ -232,9 +246,17 @@ public class Spawner : MonoBehaviour
         if (OnNewWave != null) {
             OnNewWave(currentWaveNumber);
         }
+
+        //* elevator spawn
+        if (spawnedElevator != null) {
+            spawnedElevator.NextWave -= NextWave;
+            Destroy(spawnedElevator.gameObject);
+        }
+        elevatorPosition = map.GetTileFromPosition(Vector3.zero).transform.position + new Vector3(0, -3, 0);
+        spawnedElevator = Instantiate(elevator, elevatorPosition, Quaternion.identity);
+        spawnedElevator.NextWave += NextWave;
+        spawnedElevator.gameObject.SetActive(false);
         ResetPlayerPosition();
-
-
 
     }
 

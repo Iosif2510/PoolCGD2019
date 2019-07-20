@@ -15,6 +15,7 @@ public class MapGenerator : MonoBehaviour
     public Map[] maps;
     public int mapIndex;
 
+
     public Transform tilePrefab;
     public Transform obstaclePrefab;
     public Transform navMeshFloor;
@@ -60,6 +61,7 @@ public class MapGenerator : MonoBehaviour
             Map newMap = new Map(mapSize, obstaclePercent, mapRand.Next());
             GenerateMap(newMap);
         } // Infinite mode 정해진 맵 목록 이후 랜덤 맵 출현
+
     }
 
     public void GenerateMap(Map _map) {
@@ -80,7 +82,7 @@ public class MapGenerator : MonoBehaviour
         //Generate Map Holder
         string holderName = "Generated Map";
         if (transform.Find(holderName)) {
-            DestroyImmediate(transform.Find(holderName).gameObject);
+            Destroy(transform.Find(holderName).gameObject);
         }
 
         Transform mapHolder = new GameObject(holderName).transform;
@@ -191,7 +193,7 @@ public class MapGenerator : MonoBehaviour
         return (targetAccessibleTileCount == accessibleTileCount);
     }
 
-    Vector3 CoordToPosition(int x, int y) {
+    public Vector3 CoordToPosition(int x, int y) {
         return new Vector3 (-currentMap.mapSize.x / 2f + 0.5f + x, 0, -currentMap.mapSize.y / 2f + 0.5f + y) * tileSize;
     }
 
