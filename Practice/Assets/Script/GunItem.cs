@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunItem : MonoBehaviour
+public class GunItem : Item
 {
     int maxGunNum;
     int gunNum;
-    public AudioClip[] reloadSounds;
     public Texture[] textures;
-    float rotateSpeed = 20;
 
-    void Update()
+    protected override void Start()
     {
-        transform.Rotate(Vector3.up, Time.deltaTime * rotateSpeed);
+        base.Start();
     }
-
+    protected override void Update()
+    {
+        base.Update();
+    }
     public void SetGunItem(int _gunNum)
     {
         gunNum = _gunNum;
@@ -26,8 +27,9 @@ public class GunItem : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            other.GetComponent<GunController>().EquipGun(gunNum, other.GetComponent<Renderer>().material.color);
-            AudioManager.Instance.PlaySound(reloadSounds[gunNum], transform.position);
+            GunController gunController = other.GetComponent<GunController>();
+            gunController.EquipGun(gunNum, other.GetComponent<Renderer>().material.color);
+            AudioManager.Instance.PlaySound(gunController.allGuns[gunNum].reloadAudio, transform.position);
             Destroy(gameObject);
         }
     }
