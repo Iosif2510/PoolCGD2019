@@ -74,21 +74,18 @@ public class Player : LivingEntity
             TakeDamage(health);
         }
 
-        // Color Change Input (Temporary)
+        // Color Change Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            skinMaterial.color = Color.red;
-            gunController.SetGunOwnerColor(Color.red);
+            controller.ChangeColor(skinMaterial, gunController, 'r');
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            skinMaterial.color = Color.green;
-            gunController.SetGunOwnerColor(Color.green);
+            controller.ChangeColor(skinMaterial, gunController, 'g');
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            skinMaterial.color = Color.blue;
-            gunController.SetGunOwnerColor(Color.blue);
+            controller.ChangeColor(skinMaterial, gunController, 'b');
         }
         
 
