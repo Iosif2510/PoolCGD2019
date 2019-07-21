@@ -6,6 +6,7 @@ public class LivingEntity : MonoBehaviour, IDamageable {
 
     public float startingHealth;
     public float health { get; protected set; }
+    public float maxHealth { get; protected set; }
     protected bool dead;
 
     protected Material skinMaterial;
@@ -20,6 +21,16 @@ public class LivingEntity : MonoBehaviour, IDamageable {
 
     protected virtual void Start() {
         health = startingHealth;
+        maxHealth = startingHealth;
+    }
+    public void AddHealth(float amount)
+    {
+        health += amount;
+        if (health > maxHealth) health = maxHealth;
+    }
+    public void AddMaxHealth(float amount)
+    {
+        maxHealth += amount;
     }
 
     public virtual void TakeDamage(float damage) {
