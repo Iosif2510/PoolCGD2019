@@ -15,6 +15,7 @@ public class GameUI : MonoBehaviour
     public Text newWaveEnemyCount;
     public Text scoreUI;
     public Text gameOverScoreUI;
+    public Text highScoreUI;
 
     public Text currentEnemyLeftUI;
     public RectTransform healthBar;
@@ -77,6 +78,7 @@ public class GameUI : MonoBehaviour
     {
         StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .9f), 1));
         gameOverScoreUI.text = scoreUI.text;
+        highScoreUI.text = $"HighScore: {ScoreKeeper.highscore.ToString("D6")}";
         inGameUI.SetActive(false);
         Cursor.visible = true;
         gameOverUI.SetActive(true);

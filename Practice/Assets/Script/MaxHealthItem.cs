@@ -17,8 +17,9 @@ public class MaxHealthItem : Item
         base.Update();
     }
 
-    public void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
         if(other.gameObject.tag == "Player")
         {
             other.GetComponent<LivingEntity>().AddMaxHealth(addAmount);

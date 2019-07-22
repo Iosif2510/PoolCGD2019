@@ -7,6 +7,8 @@ public class Item : MonoBehaviour
     public float rotationSpeed = 40.0f;
     public float timeToDisappear = 5.0f;
 
+    public static event System.Action ItemSecure;
+
     protected virtual void Start()
     {
         Destroy(gameObject, timeToDisappear);
@@ -16,5 +18,9 @@ public class Item : MonoBehaviour
     protected virtual void Update()
     {
         transform.Rotate(Vector3.up * Time.deltaTime * rotationSpeed);
+    }
+
+    protected virtual void OnTriggerEnter(Collider col) {
+        if (ItemSecure != null) ItemSecure();
     }
 }
