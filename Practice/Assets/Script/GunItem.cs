@@ -23,8 +23,9 @@ public class GunItem : Item
         GetComponent<Renderer>().material.mainTexture = textures[gunNum];
     }
 
-    public void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
         if(other.gameObject.tag == "Player")
         {
             GunController gunController = other.GetComponent<GunController>();

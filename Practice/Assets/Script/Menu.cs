@@ -17,6 +17,8 @@ public class Menu : MonoBehaviour
     public int[] screenWidth;
     int activeScreenResIndex;
 
+    public Text highScore;
+
     void Start() {
         activeScreenResIndex = PlayerPrefs.GetInt("screen res index");
         bool isFullScreen = (PlayerPrefs.GetInt("fullscreen") == 1) ? true : false;
@@ -30,9 +32,11 @@ public class Menu : MonoBehaviour
         }
 
         fullScreenToggle.isOn = isFullScreen;
+
+        highScore.text = $"Highscore\n{ScoreKeeper.highscore.ToString("D6")}";
     }
 
-    public void Play() {
+    public void PlayMenu() {
         mainMenuHolder.SetActive(false);
         selectMenuHolder.SetActive(true);
     }
