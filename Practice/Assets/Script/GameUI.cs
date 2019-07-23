@@ -9,6 +9,7 @@ public class GameUI : MonoBehaviour
     public Image fadePlane;
     public GameObject gameOverUI;
     public GameObject inGameUI;
+    public GameObject pauseUI;
 
     public RectTransform newWaveBanner;
     public Text newWaveTitle;
@@ -19,6 +20,8 @@ public class GameUI : MonoBehaviour
 
     public Text currentEnemyLeftUI;
     public RectTransform healthBar;
+
+    bool isPaused = false;
 
     Spawner spawner;
     Player player;
@@ -50,7 +53,7 @@ public class GameUI : MonoBehaviour
         
         StopCoroutine("AnimateNewWaveBanner");
         StartCoroutine("AnimateNewWaveBanner");
-    } 
+    }
 
     IEnumerator AnimateNewWaveBanner() {
         float delayTime = 1.5f;
@@ -76,12 +79,33 @@ public class GameUI : MonoBehaviour
 
     void OnGameOver()
     {
-        StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .9f), 1));
-        gameOverScoreUI.text = scoreUI.text;
-        highScoreUI.text = $"HighScore: {ScoreKeeper.highscore.ToString("D6")}";
-        inGameUI.SetActive(false);
-        Cursor.visible = true;
-        gameOverUI.SetActive(true);
+        if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
+            StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .9f), 1));
+            gameOverScoreUI.text = scoreUI.text;
+            highScoreUI.text = $"HighScore: {ScoreKeeper.highscore.ToString("D6")}";
+            inGameUI.SetActive(false);
+            Cursor.visible = true;
+            gameOverUI.SetActive(true);
+        }
+        else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
+            //todo
+        }
+    }
+
+    public void Pause() {
+        if (!isPaused) {
+            inGameUI.SetActive(false);
+            pauseUI.SetActive(true);
+            isPaused = true;
+            Time.timeScale = 0;
+        }
+        else {
+            Time.timeScale = 1;
+            pauseUI.SetActive(false);
+            inGameUI.SetActive(true);
+            isPaused = false;
+        }
+
     }
 
     IEnumerator Fade(Color from, Color to, float time) {
@@ -101,6 +125,7 @@ public class GameUI : MonoBehaviour
     }
 
     public void ReturnToMainMenu() {
+        Time.timeScale = 1;
         SceneManager.LoadScene("GameMenu");
     }
 }
