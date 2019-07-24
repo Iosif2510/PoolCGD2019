@@ -668,7 +668,9 @@ MonoBehaviour:
   muzzleVelocity: 35
   burstCount: 3
   reloadTime: 0.3
+  knockbackForce: 0.1
   bulletAmount: 7
+  ownerColor: {r: 0, g: 0, b: 0, a: 0}
   kickMinMax: {x: 0.05, y: 0.2}
   recoilAngleMinMax: {x: 3, y: 5}
   recoilMoveSettleTime: 0.1

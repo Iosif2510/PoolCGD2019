@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     float speed = 10;
     float damage = 1;
+    float knockbackForce;
     Color ownerColor;
 
     //* shooting
@@ -28,6 +29,11 @@ public class Projectile : MonoBehaviour
 
     public void SetSpeed(float newSpeed) {
         speed = newSpeed;
+    }
+    
+    public void SetKnockbackForce(float _knockbackForce)
+    {
+        knockbackForce = _knockbackForce;
     }
 
     void OnEnable() {
@@ -63,7 +69,7 @@ public class Projectile : MonoBehaviour
     void OnhitObject(Collider c, Vector3 hitPoint, Color shooterColor)
     {
         LivingEntity attacked = c.GetComponent<LivingEntity>();
-        if (attacked != null) attacked.TakeHit(shooterColor, hitPoint, transform.forward);
+        if (attacked != null) attacked.TakeHit(shooterColor, hitPoint, transform.forward, knockbackForce);
         Disable();
     }
 

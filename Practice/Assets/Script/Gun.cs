@@ -16,6 +16,7 @@ public class Gun : MonoBehaviour
     public float muzzleVelocity = 35;
     public int burstCount;
     public float reloadTime = .3f;
+    public float knockbackForce = 0f;
 
     Projectile[,] bullets;
     Transform[] shells;
@@ -62,6 +63,7 @@ public class Gun : MonoBehaviour
                 bullets[j,i] = Instantiate(projectile) as Projectile;
                 bullets[j,i].gameObject.SetActive(false);
                 bullets[j,i].SetSpeed(muzzleVelocity);
+                bullets[j,i].SetKnockbackForce(knockbackForce);
             }
             shells[i] = Instantiate(shell) as Transform;
             shells[i].gameObject.SetActive(false);
