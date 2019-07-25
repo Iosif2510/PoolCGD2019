@@ -5,7 +5,7 @@ using UnityEngine;
 public class GunItem : Item
 {
     int maxGunNum;
-    int gunNum;
+    public int gunNum;
     public Texture[] textures;
 
     protected override void Start()

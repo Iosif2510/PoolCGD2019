@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641287, b: 0.5748173, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1452,8 +1452,6 @@ MonoBehaviour:
     gunDropChance: 0.1
     colorsToSpawn: 02000000030000000100000004000000
   enemy: {fileID: 2753646212322466918, guid: 7f3b4c54a8c1e4ddeabc2bf002423f00, type: 3}
-  enemyHealthBar: {fileID: 9038781108312941568, guid: 0ffeb91bec7d34c2d84025b267ddd559,
-    type: 3}
   deathParticles:
   - {fileID: 3120143630414091388, guid: 9cba66ad7d480405aa10f17d8ad8b6d7, type: 3}
   - {fileID: 3120143630414091388, guid: 13b5f23f35b9e49a6868b0a8d5554041, type: 3}
@@ -6587,7 +6585,6 @@ MonoBehaviour:
   gameOverScoreUI: {fileID: 531172514}
   highScoreUI: {fileID: 665674770}
   currentEnemyLeftUI: {fileID: 1916997955}
-  healthBar: {fileID: 1941190704}
 --- !u!1 &989819254
 GameObject:
   m_ObjectHideFlags: 0
@@ -9599,7 +9596,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1407100654
 GameObject:
@@ -14106,7 +14103,7 @@ PrefabInstance:
     - target: {fileID: 7104360963436833659, guid: 20dd12811932b420b90a1bba002666c8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7104360963436833659, guid: 20dd12811932b420b90a1bba002666c8,
         type: 3}
