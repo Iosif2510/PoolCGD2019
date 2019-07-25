@@ -118,11 +118,9 @@ public class Enemy : LivingEntity
         }
     }
 
-    public void SetCharacteristics(float moveSpeed, float hitsToKillPlayer, Color skinColor, ParticleSystem _deathEffect) {
+    public void SetCharacteristics(float moveSpeed, Color skinColor, ParticleSystem _deathEffect) {
         pathfinder.speed = moveSpeed;
-        if (hasTarget) {
-            damage = (int)Mathf.Ceil(targetEntity.startingHealth / hitsToKillPlayer);
-        }
+        damage = 1;
 
         ownColor = new Color(skinColor.r, skinColor.g, skinColor.b, 1);
         deathEffect = _deathEffect;

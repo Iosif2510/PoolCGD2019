@@ -4,43 +4,50 @@ using UnityEngine;
 
 public class LivingEntity : MonoBehaviour, IDamageable {
 
-    public float startingHealth;
-    public float health { get; protected set; }
-    public float maxHealth { get; protected set; }
+    public int startingHealth;
+    public int health { get; protected set; }
+    public int maxHealth { get; protected set; }
+    public int healthLimit;
     protected bool dead;
 
     protected Material skinMaterial;
     
     public event System.Action OnDeath;
     public event System.Action<Vector3> OnDeathPosition;
+    public event System.Action OnHealthChange;
 
     protected virtual void Awake()
     {
         skinMaterial = transform.GetComponent<Renderer>().material;
-    }
-
-    protected virtual void Start() {
         health = startingHealth;
         maxHealth = startingHealth;
     }
-    public void AddHealth(float amount)
+
+    protected virtual void Start() {
+
+    }
+    
+    public void AddHealth(int amount)
     {
         health += amount;
         if (health > maxHealth) health = maxHealth;
+        OnHealthChange();
     }
-    public void AddMaxHealth(float amount)
+    public void AddMaxHealth(int amount)
     {
         maxHealth += amount;
+        OnHealthChange();
     }
 
-    public virtual void TakeDamage(float damage) {
+    public virtual void TakeDamage(int damage) {
         health -= damage;
+        OnHealthChange();
 
         if (health <= 0) {
             Die();
         }
     }
-    public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection) {
+    public virtual void TakeHit(int damage, Vector3 hitPoint, Vector3 hitDirection) {
         //! Do sth
         TakeDamage(damage);
     }

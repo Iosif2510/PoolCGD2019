@@ -17,6 +17,7 @@ public class GameUI : MonoBehaviour
     public Text scoreUI;
     public Text gameOverScoreUI;
     public Text highScoreUI;
+    public Text currentWaveUI;
 
     public Text currentEnemyLeftUI;
 
@@ -24,6 +25,12 @@ public class GameUI : MonoBehaviour
 
     Spawner spawner;
     Player player;
+
+    private GameObject[] heartContainers;
+    private Image[] heartFills;
+
+    public Transform heartsParent;
+    public GameObject heartContainerPrefab;
 
     void Awake() {
         spawner = FindObjectOfType<Spawner>();
@@ -33,16 +40,24 @@ public class GameUI : MonoBehaviour
     void Start() {
         player = FindObjectOfType<Player>();
         player.OnDeath += OnGameOver;
+
+        heartContainers = new GameObject[(int)player.healthLimit];
+        heartFills = new Image[(int)player.healthLimit];
+
+        player.OnHealthChange += UpdateHeartsHUD;
+        InstantiateHeartContainers();
+        UpdateHeartsHUD();
     }
 
     void Update() {
         
-        if (scoreUI != null) scoreUI.text = ScoreKeeper.score.ToString("D6");
-        currentEnemyLeftUI.text = $"{spawner.enemiesRemainingAlive} Enemies Left";
+        if (scoreUI != null) scoreUI.text = $"Score: {ScoreKeeper.score.ToString("D6")}";
+        currentEnemyLeftUI.text = $"Enemies Left: {spawner.enemiesRemainingAlive}";
         float healthPercent = 0;
         if (player != null) {
             healthPercent = player.health / player.startingHealth;
         }
+        if (Input.GetKeyDown(KeyCode.Escape)) Pause();
     }
 
 
@@ -50,6 +65,7 @@ public class GameUI : MonoBehaviour
         if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
             newWaveTitle.text = $"- Wave {waveNumber} -";
             newWaveEnemyCount.text = $"Enemies: {spawner.currentWave.enemyCount}";
+            currentWaveUI.text = $"Wave {waveNumber}";
             
             StopCoroutine("AnimateNewWaveBanner");
             StartCoroutine("AnimateNewWaveBanner");
@@ -129,5 +145,49 @@ public class GameUI : MonoBehaviour
     public void ReturnToMainMenu() {
         Time.timeScale = 1;
         SceneManager.LoadScene("GameMenu");
+    }
+
+    //Heart Control
+
+    public void UpdateHeartsHUD() {
+        SetHeartContainers();
+        SetFilledHearts();
+    }
+
+    void SetHeartContainers() {
+        for (int i = 0; i < heartContainers.Length; i++)
+        {
+            if (i < player.maxHealth)
+            {
+                heartContainers[i].SetActive(true);
+            }
+            else
+            {
+                heartContainers[i].SetActive(false);
+            }
+        }
+    }
+
+    void SetFilledHearts() {
+        for (int i = 0; i < heartFills.Length; i++)
+        {
+            if (i < player.health)
+            {
+                heartFills[i].fillAmount = 1;
+            }
+            else
+            {
+                heartFills[i].fillAmount = 0;
+            }
+        }
+    }
+    void InstantiateHeartContainers() {
+        for (int i = 0; i < player.healthLimit; i++)
+        {
+            GameObject temp = Instantiate(heartContainerPrefab);
+            temp.transform.SetParent(heartsParent, false);
+            heartContainers[i] = temp;
+            heartFills[i] = temp.transform.Find("HeartFill").GetComponent<Image>();
+        }
     }
 }

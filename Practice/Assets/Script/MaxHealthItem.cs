@@ -5,7 +5,7 @@ using UnityEngine;
 public class MaxHealthItem : Item
 {
 
-    public float addAmount = 1;
+    public int addAmount = 1;
 
     protected override void Start()
     {

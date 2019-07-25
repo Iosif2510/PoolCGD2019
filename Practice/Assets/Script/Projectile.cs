@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     float speed = 10;
-    float damage = 1;
+    int damage = 1;
     float knockbackForce;
     Color ownerColor;
 

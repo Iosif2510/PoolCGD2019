@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealingItem : Item
 {
-    public float healingAmount = 1;
+    public int healingAmount = 1;
 
     protected override void Start()
     {
