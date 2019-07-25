@@ -35,7 +35,12 @@ public class Player : LivingEntity
 
     protected override void Die() {
         AudioManager.Instance.PlaySound("Player Death", transform.position);
-        base.Die();
+        if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
+            Spawner.Instance.ResetPlayerPosition();
+            health = maxHealth;
+        }
+        else base.Die();
+        
     }
 
     void Update() {

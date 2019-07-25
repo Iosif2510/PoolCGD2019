@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    private static Spawner instance;
+    public static Spawner Instance {
+        get { return instance; }
+    }
+
     public bool devMode;
 
     public Wave[] waves;
     public Enemy enemy;
-    public EnemyHealthBar enemyHealthBar;
     LivingEntity playerEntity;
     Transform playerT;
 
@@ -43,6 +47,15 @@ public class Spawner : MonoBehaviour
     bool isDisabled;
 
     public event System.Action<int> OnNewWave;
+
+    void Awake() {
+        if (instance != null && instance != this) {
+            Destroy(this.gameObject);
+        }
+        else {
+            instance = this;
+        }
+    }
 
     void Start() {
         playerEntity = FindObjectOfType<Player>();
@@ -117,9 +130,6 @@ public class Spawner : MonoBehaviour
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>()) {
                     Destroy(enemy.gameObject);
                 }
-                foreach (EnemyHealthBar enemyHB in FindObjectsOfType<EnemyHealthBar>()) {
-                    Destroy(enemyHB.gameObject);
-                }
                 NextWave();
             }
         }
@@ -154,9 +164,6 @@ public class Spawner : MonoBehaviour
         if (deathParticlesDict.ContainsKey(enemyColorState)) {
             spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, enemyColor, deathParticlesDict[enemyColorState]);
         }
-
-        EnemyHealthBar spawnedEnemyHealthBar = Instantiate(enemyHealthBar, spawnedEnemy.transform.position + EnemyHealthBar.initialPosition, Quaternion.identity) as EnemyHealthBar;
-        spawnedEnemyHealthBar.SetEnemy(spawnedEnemy);
 
         if (tileMat.color != initialColor) tileMat.color = initialColor;
     }
@@ -200,8 +207,11 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    void ResetPlayerPosition() {
-        playerT.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up * 3;
+    public void ResetPlayerPosition() {
+        if ((map.currentMode == MapGenerator.GameMode.Tutorial) && (currentWave == waves[0])) {
+            playerT.position = map.GetTileFromPosition(new Vector3(2, 0, 3)).position + Vector3.up * 3;
+        }
+        else playerT.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up * 3;
     }
 
     void NextWave() {
@@ -257,6 +267,10 @@ public class Spawner : MonoBehaviour
         spawnedElevator.NextWave += NextWave;
         spawnedElevator.gameObject.SetActive(false);
         ResetPlayerPosition();
+
+        if (enemiesRemainingAlive == 0) {
+            spawnedElevator.gameObject.SetActive(true);
+        }
 
     }
 

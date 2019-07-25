@@ -8,15 +8,11 @@ public class MapEditor : Editor {
     public override void OnInspectorGUI() {
         MapGenerator map = target as MapGenerator;
 
-        if (map.currentMode != MapGenerator.GameMode.Infinite) {
-            if (DrawDefaultInspector()) map.GenerateMap(map.maps[map.mapIndex]);
-            if (GUILayout.Button("Generate Map")) map.GenerateMap(map.maps[map.mapIndex]);
+        if (map.transform.Find("Map Generator")) {
+            DestroyImmediate(map.transform.Find("Map Generator").gameObject);
         }
-        else {
-            MapGenerator.Map newMap = new MapGenerator.Map();
-            if (DrawDefaultInspector()) map.GenerateMap(newMap);
-            if (GUILayout.Button("Generate Map")) map.GenerateMap(newMap);
-        }
+        if (DrawDefaultInspector()) map.GenerateMap(map.maps[map.mapIndex]);
+        if (GUILayout.Button("Generate Map")) map.GenerateMap(map.maps[map.mapIndex]);
         
     }
 }

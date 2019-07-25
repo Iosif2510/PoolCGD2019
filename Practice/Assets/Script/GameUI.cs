@@ -19,7 +19,6 @@ public class GameUI : MonoBehaviour
     public Text highScoreUI;
 
     public Text currentEnemyLeftUI;
-    public RectTransform healthBar;
 
     bool isPaused = false;
 
@@ -37,22 +36,25 @@ public class GameUI : MonoBehaviour
     }
 
     void Update() {
-        scoreUI.text = ScoreKeeper.score.ToString("D6");
+        
+        if (scoreUI != null) scoreUI.text = ScoreKeeper.score.ToString("D6");
         currentEnemyLeftUI.text = $"{spawner.enemiesRemainingAlive} Enemies Left";
         float healthPercent = 0;
         if (player != null) {
             healthPercent = player.health / player.startingHealth;
         }
-        healthBar.localScale = new Vector3(healthPercent, 1, 1);
     }
 
 
     void OnNewWave(int waveNumber) {
-        newWaveTitle.text = $"- Wave {waveNumber} -";
-        newWaveEnemyCount.text = $"Enemies: {spawner.currentWave.enemyCount}";
-        
-        StopCoroutine("AnimateNewWaveBanner");
-        StartCoroutine("AnimateNewWaveBanner");
+        if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
+            newWaveTitle.text = $"- Wave {waveNumber} -";
+            newWaveEnemyCount.text = $"Enemies: {spawner.currentWave.enemyCount}";
+            
+            StopCoroutine("AnimateNewWaveBanner");
+            StartCoroutine("AnimateNewWaveBanner");
+        } 
+
     }
 
     IEnumerator AnimateNewWaveBanner() {
@@ -121,7 +123,7 @@ public class GameUI : MonoBehaviour
 
     //UI input
     public void StartNewGame() {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ReturnToMainMenu() {

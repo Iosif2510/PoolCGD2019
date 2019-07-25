@@ -61,6 +61,9 @@ public class MapGenerator : MonoBehaviour
             Map newMap = new Map(mapSize, obstaclePercent, mapRand.Next());
             GenerateMap(newMap);
         } // Infinite mode 정해진 맵 목록 이후 랜덤 맵 출현
+        else if (currentMode == GameMode.Tutorial) {
+            //You Finished Tutorial!
+        }
 
     }
 
@@ -87,6 +90,8 @@ public class MapGenerator : MonoBehaviour
 
         Transform mapHolder = new GameObject(holderName).transform;
         mapHolder.parent = transform;
+
+        //print($"current map size: {currentMap.mapSize.x}, {currentMap.mapSize.y}");
 
         //* Tile Generation
         for (int x = 0; x < currentMap.mapSize.x; x++) {
