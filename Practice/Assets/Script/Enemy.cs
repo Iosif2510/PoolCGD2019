@@ -81,16 +81,22 @@ public class Enemy : LivingEntity
     }
     */
 
-    public override void TakeHit(Color attackerColor, Vector3 hitPoint, Vector3 hitDirection)
+    public override void TakeHit(Color attackerColor, Vector3 hitPoint, Vector3 hitDirection, float knockbackForce)
     {
         AudioManager.Instance.PlaySound("Impact", transform.position);
-        if (MergeColor(skinMaterial.color, attackerColor) == Color.white)
+        MergeColor(attackerColor);
+        if(knockbackForce != 0)
+        {
+            StartCoroutine(Knockback(hitDirection.normalized, knockbackForce));
+            return;
+        }
+        if (skinMaterial.color == Color.white)
         { //Death Effect
             if (OnDeathStatic != null) OnDeathStatic();
             AudioManager.Instance.PlaySound("Enemy Death", transform.position);
             Destroy(Instantiate(whiteDeathEffect.gameObject, transform.position, Quaternion.identity) as GameObject, whiteDeathEffect.GetComponent<WhiteDeathEffect>().fadeOutTime);
+            Die();
         }
-        base.TakeHit(attackerColor, hitPoint, hitDirection);
     }
 
     void OnTargetDeath() {
@@ -134,6 +140,26 @@ public class Enemy : LivingEntity
         }
         */
         base.Die();
+    }
+
+    IEnumerator Knockback(Vector3 hitDirection, float knockbackForce)
+    {
+        currentState = State.Idle;
+        float knockbackTime = 0.1f;
+        while(knockbackTime >= 0)
+        {
+            transform.position += Vector3.Lerp(hitDirection * knockbackForce, Vector3.zero, knockbackTime / 0.5f);
+            knockbackTime -= Time.deltaTime;
+            yield return null;
+        }
+        currentState = State.Chasing;
+        if (skinMaterial.color == Color.white)
+        { //Death Effect
+            if (OnDeathStatic != null) OnDeathStatic();
+            AudioManager.Instance.PlaySound("Enemy Death", transform.position);
+            Destroy(Instantiate(whiteDeathEffect.gameObject, transform.position, Quaternion.identity) as GameObject, whiteDeathEffect.GetComponent<WhiteDeathEffect>().fadeOutTime);
+            Die();
+        }
     }
 
     IEnumerator Attack() {

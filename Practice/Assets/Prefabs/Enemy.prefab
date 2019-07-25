@@ -111,7 +111,6 @@ MonoBehaviour:
     type: 3}
   whiteDeathEffect: {fileID: 8192283611856905039, guid: 7b09bebe7f1c1ed40ae57edd9fc8ce51,
     type: 3}
-  gunItem: {fileID: 541812804097702703, guid: e55b8f1fc407fcd4fbe5174cdb957ee5, type: 3}
   ownColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!195 &2753646212322466921
 NavMeshAgent:

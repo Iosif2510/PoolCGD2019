@@ -45,25 +45,27 @@ public class LivingEntity : MonoBehaviour, IDamageable {
         TakeDamage(damage);
     }
 
-    public virtual void TakeHit(Color attackerColor, Vector3 hitPoint, Vector3 hitDirection)
+    public virtual void TakeHit(Color attackerColor, Vector3 hitPoint, Vector3 hitDirection, float knockbackForce)
     {
         Color beforeColor = skinMaterial.color;
 
-        skinMaterial.color =  MergeColor(beforeColor, attackerColor);
+        MergeColor(attackerColor);
 
         if (skinMaterial.color == Color.white) Die();
     }
 
-    public static Color MergeColor(Color c1, Color c2)
+    public void MergeColor(Color addedColor)
     {
-        if((c1.r == 1 && c2.r == 1) || (c1.g == 1 && c2.g == 1) || (c1.b == 1 && c2.b == 1))
-            return c1;
+        Color beforeColor = skinMaterial.color;
 
-        float rValue = c1.r + c2.r;
-        float gValue = c1.g + c2.g;
-        float bValue = c1.b + c2.b;
+        if((beforeColor.r == 1 && addedColor.r == 1) || (beforeColor.g == 1 && addedColor.g == 1) || (beforeColor.b == 1 && addedColor.b == 1))
+            return;
 
-        return new Color(rValue, gValue, bValue);
+        float rValue = beforeColor.r + addedColor.r;
+        float gValue = beforeColor.g + addedColor.g;
+        float bValue = beforeColor.b + addedColor.b;
+
+        skinMaterial.color =  new Color(rValue, gValue, bValue);
     }
 
     [ContextMenu("Self Destruct")]
