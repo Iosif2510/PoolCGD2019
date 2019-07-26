@@ -10,7 +10,7 @@ public class GunController : MonoBehaviour
 
     void Start() {
         if (allGuns[0] != null) {
-            EquipGun(allGuns[0], gameObject.GetComponent<Renderer>().material.color);
+            EquipGun(allGuns[3], gameObject.GetComponent<Renderer>().material.color);
         } 
     }
 

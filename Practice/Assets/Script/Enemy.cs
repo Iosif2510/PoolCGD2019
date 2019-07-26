@@ -94,7 +94,7 @@ public class Enemy : LivingEntity
         { //Death Effect
             if (OnDeathStatic != null) OnDeathStatic();
             AudioManager.Instance.PlaySound("Enemy Death", transform.position);
-            Destroy(Instantiate(whiteDeathEffect.gameObject, transform.position, Quaternion.identity) as GameObject, whiteDeathEffect.GetComponent<WhiteDeathEffect>().fadeOutTime);
+            WhiteDeathEffect wde = Instantiate(whiteDeathEffect, transform.position, Quaternion.identity) as WhiteDeathEffect;
             Die();
         }
     }
@@ -157,7 +157,7 @@ public class Enemy : LivingEntity
         { //Death Effect
             if (OnDeathStatic != null) OnDeathStatic();
             AudioManager.Instance.PlaySound("Enemy Death", transform.position);
-            Destroy(Instantiate(whiteDeathEffect.gameObject, transform.position, Quaternion.identity) as GameObject, whiteDeathEffect.GetComponent<WhiteDeathEffect>().fadeOutTime);
+            WhiteDeathEffect wde = Instantiate(whiteDeathEffect, transform.position, Quaternion.identity) as WhiteDeathEffect;
             Die();
         }
     }
