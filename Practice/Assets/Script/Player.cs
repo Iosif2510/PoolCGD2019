@@ -82,15 +82,15 @@ public class Player : LivingEntity
         // Color Change Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            controller.ChangeColor(skinMaterial, gunController, 'r');
+            controller.ChangeColor(skinMaterial, 'r');
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            controller.ChangeColor(skinMaterial, gunController, 'g');
+            controller.ChangeColor(skinMaterial, 'g');
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            controller.ChangeColor(skinMaterial, gunController, 'b');
+            controller.ChangeColor(skinMaterial, 'b');
         }
         
 

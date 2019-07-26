@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    PlayerController playerController;
+
     float speed = 10;
     int damage = 1;
     float knockbackForce;
@@ -16,15 +18,11 @@ public class Projectile : MonoBehaviour
 
     //* Collision
     public LayerMask collisionMask;
-    public Color trailColor;
 
-    void Start() {
-        GetComponent<TrailRenderer>().material.SetColor("_TintColor", trailColor);
-    }
-
-    public void SetOwnerColor(Color c)
-    {
-        ownerColor = c;
+    void Awake() {
+        GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.white);
+        playerController = FindObjectOfType<PlayerController>();
+        print(playerController.gameObject.name);
     }
 
     public void SetSpeed(float newSpeed) {
@@ -36,13 +34,18 @@ public class Projectile : MonoBehaviour
         knockbackForce = _knockbackForce;
     }
 
-    void OnEnable() {
+    public void GameObjectEnable() {
+        gameObject.SetActive(true);
         spawnTime = Time.time;
+        //if (playerController != null) 
+        ownerColor = playerController.playerColor;
+        GetComponent<TrailRenderer>().material.SetColor("_TintColor", ownerColor);
 
         Collider[] initialCollisions = Physics.OverlapSphere(transform.position, .1f, collisionMask);
         if (initialCollisions.Length > 0) {
             OnhitObject(initialCollisions[0], transform.position, ownerColor);
         }
+        print($"Bullet Color: {ownerColor.r}, {ownerColor.g}, {ownerColor.b}");
     }
 
     void Update()

@@ -25,12 +25,22 @@ public class GameUI : MonoBehaviour
 
     Spawner spawner;
     Player player;
+    PlayerController playerController;
 
     private GameObject[] heartContainers;
     private Image[] heartFills;
 
     public Transform heartsParent;
     public GameObject heartContainerPrefab;
+
+    public Transform colorChangeUI;
+    public Image currentColor;
+    public Image redColor;
+    public Image greenColor;
+    public Image blueColor;
+    Color redColorFade = new Color(1, 0, 0, 0.5f);
+    Color greenColorFade = new Color(0, 1, 0, 0.5f);
+    Color blueColorFade = new Color(0, 0, 1, 0.5f);
 
     void Awake() {
         spawner = FindObjectOfType<Spawner>();
@@ -40,6 +50,8 @@ public class GameUI : MonoBehaviour
     void Start() {
         player = FindObjectOfType<Player>();
         player.OnDeath += OnGameOver;
+        playerController = player.GetComponent<PlayerController>();
+        playerController.onColorChange += UpdateColorHUD;
 
         heartContainers = new GameObject[(int)player.healthLimit];
         heartFills = new Image[(int)player.healthLimit];
@@ -50,13 +62,8 @@ public class GameUI : MonoBehaviour
     }
 
     void Update() {
-        
         if (scoreUI != null) scoreUI.text = $"Score: {ScoreKeeper.score.ToString("D6")}";
         currentEnemyLeftUI.text = $"Enemies Left: {spawner.enemiesRemainingAlive}";
-        float healthPercent = 0;
-        if (player != null) {
-            healthPercent = player.health / player.startingHealth;
-        }
         if (Input.GetKeyDown(KeyCode.Escape)) Pause();
     }
 
@@ -152,6 +159,14 @@ public class GameUI : MonoBehaviour
     public void UpdateHeartsHUD() {
         SetHeartContainers();
         SetFilledHearts();
+    }
+
+    public void UpdateColorHUD() {
+        Color playerColor = playerController.playerColor;
+        currentColor.color = playerColor;
+        redColor.color = playerColor.r == 1 ? Color.red : redColorFade;
+        greenColor.color = playerColor.g == 1 ? Color.green : greenColorFade;
+        blueColor.color = playerColor.b == 1 ? Color.blue : blueColorFade;
     }
 
     void SetHeartContainers() {

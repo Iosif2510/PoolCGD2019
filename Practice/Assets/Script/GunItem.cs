@@ -19,7 +19,7 @@ public class GunItem : Item
     public void SetGunItem(int _gunNum)
     {
         gunNum = _gunNum;
-        Debug.Log(gunNum);
+        //Debug.Log(gunNum);
         GetComponent<Renderer>().material.mainTexture = textures[gunNum];
     }
 

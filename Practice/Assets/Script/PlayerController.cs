@@ -8,9 +8,8 @@ public class PlayerController : MonoBehaviour
     Rigidbody myRigidbody;
     Vector3 velocity;
 
-    float red = 1;
-    float green = 0;
-    float blue = 0;
+    public Color playerColor = new Color(0,0,0,1);
+    public event System.Action onColorChange;
 
     void Start()
     {
@@ -30,23 +29,22 @@ public class PlayerController : MonoBehaviour
         myRigidbody.MovePosition(myRigidbody.position + velocity * Time.fixedDeltaTime);
     }
 
-    public void ChangeColor(Material playerMat, GunController playerGC, char rgb)
+    public void ChangeColor(Material playerMat, char rgb)
     {
         switch (rgb)
         {
             case 'r':
-                red = red == 1 ? 0 : 1;
+                playerColor.r = playerColor.r == 1 ? 0 : 1;
                 break;
             case 'g':
-                green = green == 1 ? 0 : 1;
+                playerColor.g = playerColor.g == 1 ? 0 : 1;
                 break;
             case 'b':
-                blue = blue == 1 ? 0 : 1;
+                playerColor.b = playerColor.b == 1 ? 0 : 1;
                 break;
             default: break;
         }
-        Color changedColor = new Color(red, green, blue);
-        playerMat.color = changedColor;
-        playerGC.SetGunOwnerColor(changedColor);
+        playerMat.color = playerColor;
+        onColorChange();
     }
 }
