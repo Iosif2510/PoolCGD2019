@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
     void Awake() {
         GetComponent<TrailRenderer>().material.SetColor("_TintColor", Color.white);
         playerController = FindObjectOfType<PlayerController>();
-        print(playerController.gameObject.name);
+        //print(playerController.gameObject.name);
     }
 
     public void SetSpeed(float newSpeed) {

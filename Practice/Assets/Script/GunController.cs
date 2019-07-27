@@ -6,35 +6,33 @@ public class GunController : MonoBehaviour
 {
     public Transform weaponHold;
     public Gun[] allGuns;
-    bool[] possessingGuns;
-    Gun equippedGun;
+    public bool[] acquiredGuns;
+    public int currnetGunIndex;
+    public Gun equippedGun;
+    public event System.Action OnEquipGun;
 
     void Start() {
         if (allGuns[0] != null) {
-            EquipGun(allGuns[0], gameObject.GetComponent<Renderer>().material.color);
-        }
-
-        int gunNum = allGuns.Length;
-        possessingGuns = new bool[gunNum];
-        possessingGuns[0] = true;
-        for (int i = 1; i < gunNum; i++) {
-            possessingGuns[i] = false;
+            EquipGun(allGuns[0]);
         }
     }
 
-    public void AcquireGun(int gunIndex, Color ownerColor) {
-        possessingGuns[gunIndex] = true;
-        EquipGun(allGuns[gunIndex], ownerColor);
+    public void AcquireGun(int gunIndex) {
+        acquiredGuns[gunIndex] = true;
+        allGuns[gunIndex].AcquireAmmo();
+        EquipGun(gunIndex);
     }
 
-    public void EquipGun(Gun gunToEquip, Color ownerColor) {
+    private void EquipGun(Gun gunToEquip) {
         if (equippedGun != null) Destroy(equippedGun.gameObject);
         equippedGun = Instantiate(gunToEquip, weaponHold.position, weaponHold.rotation) as Gun;
         equippedGun.transform.parent = weaponHold;
-    }
+        OnEquipGun();
+    } //! do not use directly
 
-    public void EquipGun(int weponIndex, Color ownerColor) {
-        EquipGun(allGuns[weponIndex], ownerColor);
+    public void EquipGun(int weaponIndex) {
+        currnetGunIndex = weaponIndex;
+        EquipGun(allGuns[weaponIndex]);
     }
 
     public void OnTriggerHold() {
