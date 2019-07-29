@@ -5,7 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public float rotationSpeed = 40.0f;
-    public float timeToDisappear = 5.0f;
+    public float timeToDisappear = 10.0f;
 
     public static event System.Action ItemSecure;
 

@@ -29,7 +29,7 @@ public class GunItem : Item
         if(other.gameObject.tag == "Player")
         {
             GunController gunController = other.GetComponent<GunController>();
-            gunController.EquipGun(gunNum);
+            gunController.AcquireGun(gunNum);
             AudioManager.Instance.PlaySound(gunController.allGuns[gunNum].reloadAudio, transform.position);
             Destroy(gameObject);
         }

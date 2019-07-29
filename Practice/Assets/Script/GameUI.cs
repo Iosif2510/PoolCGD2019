@@ -76,6 +76,7 @@ public class GameUI : MonoBehaviour
         Gun.OnShoot += ShootAmmoShow;
         Gun.OnReload += ReloadAmmoShow;
         gunController.OnEquipGun += ResetAmmoShow;
+        gunController.OnEquipGun += CurrentWeaponShow;
 
         ammo = new GameObject[40];
         InstantiateAmmoContainers();
@@ -249,6 +250,9 @@ public class GameUI : MonoBehaviour
     }
 
     public void ResetAmmoShow() {
+        print("reset ammo show called");
+        print($"current gun: {gunController.equippedGun}");
+        print($"ammo Length: {ammo.Length}");
         ammoText.text = $"{gunController.equippedGun.currentAmmo} / {gunController.equippedGun.maxAmmo}";
         for (int i = 0; i < ammo.Length; i++) {
             if (i < gunController.equippedGun.projectilesRemainingInMag)

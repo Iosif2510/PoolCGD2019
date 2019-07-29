@@ -30,7 +30,6 @@ public class Player : LivingEntity
 
     void OnNewWave(int waveNumber) {
         health = startingHealth;
-        gunController.EquipGun(0);
     }
 
     protected override void Die() {
@@ -92,17 +91,22 @@ public class Player : LivingEntity
         {
             controller.ChangeColor(skinMaterial, 'b');
         }
-        
+
+        int allGunNum = gunController.allGuns.Length;
         
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
             int index;
-            for (index = gunController.currnetGunIndex; !gunController.acquiredGuns[index]; index--) {}
+            for (index = (gunController.currnetGunIndex - 1) % allGunNum; gunController.allGunsBullet[index] <= 0;
+            index = (index - 1) % allGunNum) {}
+            print(index);
             gunController.EquipGun(index);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0) {
             int index;
-            for (index = gunController.currnetGunIndex; !gunController.acquiredGuns[index]; index++) {}
+            for (index = (gunController.currnetGunIndex + 1) % allGunNum; gunController.allGunsBullet[index] <= 0;
+            index = (index + 1) % allGunNum) {}
+            print(index);
             gunController.EquipGun(index);
         }
 
