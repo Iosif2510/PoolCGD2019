@@ -622,7 +622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4840247139122948052
 Transform:
   m_ObjectHideFlags: 0
@@ -670,7 +670,7 @@ MonoBehaviour:
   reloadTime: 0.3
   knockbackForce: 0.1
   maxAmmo: 100
-  currentAmmo: 0
+  currentAmmo: 100
   defaultAmmo: 20
   projectilesPerMag: 7
   projectilesRemainingInMag: 0

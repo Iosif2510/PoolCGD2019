@@ -6,33 +6,43 @@ public class GunController : MonoBehaviour
 {
     public Transform weaponHold;
     public Gun[] allGuns;
-    public int[] allGunsBullet;
+    public bool[] acquiredGuns;
     public int currnetGunIndex;
     public Gun equippedGun;
+
+    private Gun[] allGunsObj;
+
     public event System.Action OnEquipGun;
 
     void Start() {
-        allGunsBullet = new int[allGuns.Length];
-        for (int i = 0; i < allGunsBullet.Length; i++) {
-            allGunsBullet[i] = 0;
+        allGunsObj = new Gun[allGuns.Length];
+        acquiredGuns = new bool[allGuns.Length];
+        for (int i = 0; i < allGuns.Length; i++) {
+            allGunsObj[i] = null;
+            acquiredGuns[i] = false;
         }
-        if (allGuns[0] != null) {
+        for (int i = 0; i < allGuns.Length; i++) {
+            allGunsObj[i] = Instantiate(allGuns[i], weaponHold.position, weaponHold.rotation, weaponHold) as Gun;
+            allGunsObj[i].gameObject.SetActive(false);
+        }
+        if (allGunsObj[0] != null) {
             EquipGun(0);
         }
     }
 
     public void AcquireGun(int gunIndex) {
-        allGuns[gunIndex].AcquireAmmo();
-        allGunsBullet[gunIndex] += allGuns[gunIndex].defaultAmmo;
+        allGunsObj[gunIndex].AcquireAmmo();
         EquipGun(gunIndex);
     }
 
     public void EquipGun(int weaponIndex) {
         currnetGunIndex = weaponIndex;
-        if (equippedGun != null) Destroy(equippedGun.gameObject);
-        equippedGun = Instantiate(allGuns[weaponIndex], weaponHold.position, weaponHold.rotation) as Gun;
-        equippedGun.transform.parent = weaponHold;
-        equippedGun.currentAmmo = allGunsBullet[weaponIndex];
+        if (equippedGun != null) {
+            equippedGun.gameObject.SetActive(false);
+            }
+        allGunsObj[weaponIndex].gameObject.SetActive(true);
+        equippedGun = allGunsObj[weaponIndex];
+        acquiredGuns[weaponIndex] = true;
         OnEquipGun();
         print("OnEquipGun called");
     }

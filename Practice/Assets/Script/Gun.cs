@@ -57,7 +57,7 @@ public class Gun : MonoBehaviour
     float recoilRotSmoothDampSpeed;
     float recoilAngle;
     
-    public void Start() {
+    public void Awake() {
         shotsRemainingInBurst = burstCount;
         muzzleflash = GetComponent<MuzzleFlash>();
         int projectileSpawnLength = projectileSpawn.Length;

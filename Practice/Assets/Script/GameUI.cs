@@ -62,6 +62,10 @@ public class GameUI : MonoBehaviour
     private Vector3 gunShowScale = new Vector3(150, 150, 150);
     private GameObject[] ammo;
 
+    int currentAmmo;
+    int maxAmmo;
+    int ammoRemainingInMag;
+
     GunController gunController;
 
     void Awake() {
@@ -78,7 +82,6 @@ public class GameUI : MonoBehaviour
         gunController.OnEquipGun += ResetAmmoShow;
         gunController.OnEquipGun += CurrentWeaponShow;
 
-        ammo = new GameObject[40];
         InstantiateAmmoContainers();
     }
 
@@ -242,6 +245,7 @@ public class GameUI : MonoBehaviour
     }
 
     void InstantiateAmmoContainers() {
+        ammo = new GameObject[40];
         for (int i = 0; i < ammo.Length; i++) {
             ammo[i] = Instantiate(ammoPrefab);
             ammo[i].transform.SetParent(ammoParent, false);
@@ -250,17 +254,27 @@ public class GameUI : MonoBehaviour
     }
 
     public void ResetAmmoShow() {
+        /*         
         print("reset ammo show called");
         print($"current gun: {gunController.equippedGun}");
         print($"ammo Length: {ammo.Length}");
-        ammoText.text = $"{gunController.equippedGun.currentAmmo} / {gunController.equippedGun.maxAmmo}";
+        */
+
+        currentAmmo = gunController.equippedGun.currentAmmo / gunController.equippedGun.projectileSpawn.Length;
+        maxAmmo = gunController.equippedGun.maxAmmo / gunController.equippedGun.projectileSpawn.Length;
+        ammoRemainingInMag = gunController.equippedGun.projectilesRemainingInMag / gunController.equippedGun.projectileSpawn.Length;
+
+        ammoText.text = $"{currentAmmo} / {maxAmmo}";
         for (int i = 0; i < ammo.Length; i++) {
-            if (i < gunController.equippedGun.projectilesRemainingInMag)
+            //print(gunController.equippedGun.projectilesRemainingInMag);
+            if (i < ammoRemainingInMag)
             {
+                print("Ammo SetActive");
                 ammo[i].SetActive(true);
             }
             else
             {
+                print("Ammo SetInactive");
                 ammo[i].SetActive(false);
             }
         }
@@ -271,8 +285,12 @@ public class GameUI : MonoBehaviour
     }
 
     public void ShootAmmoShow() {
-        ammoText.text = $"{gunController.equippedGun.currentAmmo} / {gunController.equippedGun.maxAmmo}";
-        ammo[gunController.equippedGun.projectilesRemainingInMag].SetActive(false);
+        currentAmmo = gunController.equippedGun.currentAmmo / gunController.equippedGun.projectileSpawn.Length;
+        maxAmmo = gunController.equippedGun.maxAmmo / gunController.equippedGun.projectileSpawn.Length;
+        ammoRemainingInMag = gunController.equippedGun.projectilesRemainingInMag / gunController.equippedGun.projectileSpawn.Length;
+
+        ammoText.text = $"{currentAmmo} / {maxAmmo}";
+        ammo[ammoRemainingInMag].SetActive(false);
     }
 
 }

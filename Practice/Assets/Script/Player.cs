@@ -96,7 +96,7 @@ public class Player : LivingEntity
         
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
             int index;
-            for (index = (gunController.currnetGunIndex - 1) % allGunNum; gunController.allGunsBullet[index] <= 0;
+            for (index = (gunController.currnetGunIndex - 1) % allGunNum; !gunController.acquiredGuns[index];
             index = (index - 1) % allGunNum) {}
             print(index);
             gunController.EquipGun(index);
@@ -104,7 +104,7 @@ public class Player : LivingEntity
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0) {
             int index;
-            for (index = (gunController.currnetGunIndex + 1) % allGunNum; gunController.allGunsBullet[index] <= 0;
+            for (index = (gunController.currnetGunIndex + 1) % allGunNum; !gunController.acquiredGuns[index];
             index = (index + 1) % allGunNum) {}
             print(index);
             gunController.EquipGun(index);
