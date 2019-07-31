@@ -162,7 +162,7 @@ public class Spawner : MonoBehaviour
         Enemy spawnedEnemy = Instantiate(enemy, spawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
         spawnedEnemy.OnDeathPosition += OnEnemyDeath;
         if (deathParticlesDict.ContainsKey(enemyColorState)) {
-            spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, enemyColor, deathParticlesDict[enemyColorState]);
+            spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, enemyColor, deathParticlesDict[enemyColorState]);
         }
 
         if (tileMat.color != initialColor) tileMat.color = initialColor;
@@ -238,10 +238,9 @@ public class Spawner : MonoBehaviour
             currentWave.timeBetweenSpawns = 1f;
             currentWave.moveSpeed = 3;
             currentWave.gunDropChance = 0.03f;
-            currentWave.hitsToKillPlayer = 5;
             */
 
-            currentWave.SetWaveProperty(1f, 3, 0.03f, 5);
+            currentWave.SetWaveProperty(1f, 3, 0.03f);
             currentWave.SpawnAllColor();
             //print($"Gun Drop Chance: {currentWave.gunDropChance}");
         }
@@ -280,16 +279,15 @@ public class Spawner : MonoBehaviour
         public float timeBetweenSpawns;
 
         public float moveSpeed;
-        public int hitsToKillPlayer;
+
         [Range(0,1)]
         public float gunDropChance;
         public ColorState[] colorsToSpawn;
 
-        public void SetWaveProperty(float _timeBtwSpawns, float _movSpeed, float _gunDropChance, int _hitsToKillPlayer) {
+        public void SetWaveProperty(float _timeBtwSpawns, float _movSpeed, float _gunDropChance) {
             timeBetweenSpawns = _timeBtwSpawns;
             moveSpeed = _movSpeed;
             gunDropChance = _gunDropChance;
-            hitsToKillPlayer = _hitsToKillPlayer;
         }
 
         public void SpawnAllColor() {

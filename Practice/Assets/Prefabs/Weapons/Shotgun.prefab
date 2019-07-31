@@ -622,7 +622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4840247139122948052
 Transform:
   m_ObjectHideFlags: 0
@@ -669,8 +669,12 @@ MonoBehaviour:
   burstCount: 3
   reloadTime: 0.3
   knockbackForce: 0.1
+  maxAmmo: 100
+  currentAmmo: 100
+  defaultAmmo: 20
+  projectilesPerMag: 7
+  projectilesRemainingInMag: 0
   bulletAmount: 7
-  ownerColor: {r: 0, g: 0, b: 0, a: 0}
   kickMinMax: {x: 0.05, y: 0.2}
   recoilAngleMinMax: {x: 3, y: 5}
   recoilMoveSettleTime: 0.1

@@ -10,6 +10,10 @@ public class Gun : MonoBehaviour
 
     public FireMode fireMode;
 
+    public static event System.Action OnShoot;
+    public static event System.Action OnReload;
+
+    [Header("Ammo")]
     public Transform[] projectileSpawn;
     public Projectile projectile;
     public float msBtwShots = 100;
@@ -17,14 +21,25 @@ public class Gun : MonoBehaviour
     public int burstCount;
     public float reloadTime = .3f;
     public float knockbackForce = 0f;
+    
+    public int maxAmmo; //!
+    public int currentAmmo;
+    public int defaultAmmo;
+    public int projectilesPerMag;
+    public int projectilesRemainingInMag;
+    
     public bool penetration = false;
 
     Projectile[,] bullets;
     Transform[] shells;
     public int bulletAmount = 30;
     int index;
+    float nextShotTime;
+    
+    bool triggerReleasedSinceLastShot;
+    int shotsRemainingInBurst;
+    bool isReloading;
 
-    public Color ownerColor;
 
     [Header("Recoil")]
     public Vector2 kickMinMax = new Vector2(.05f, 2f);
@@ -40,19 +55,11 @@ public class Gun : MonoBehaviour
     public AudioClip reloadAudio;
     MuzzleFlash muzzleflash;
 
-    float nextShotTime;
-    
-    bool triggerReleasedSinceLastShot;
-    int shotsRemainingInBurst;
-    int projectilesPerMag;
-    int projectilesRemainingInMag;
-    bool isReloading;
-
     Vector3 recoilSmoothDampVelocity;
     float recoilRotSmoothDampSpeed;
     float recoilAngle;
     
-    public void Start() {
+    public void Awake() {
         shotsRemainingInBurst = burstCount;
         muzzleflash = GetComponent<MuzzleFlash>();
         int projectileSpawnLength = projectileSpawn.Length;
@@ -100,15 +107,15 @@ public class Gun : MonoBehaviour
                 if (!bullets[i, index].gameObject.activeSelf) {
                     if (projectilesRemainingInMag == 0) break;
                     projectilesRemainingInMag--;
+                    if (maxAmmo >= 0) currentAmmo--;
                     nextShotTime = Time.time + msBtwShots / 1000;
 
                     bullets[i, index].transform.position = projectileSpawn[i].position;
                     bullets[i, index].transform.rotation = projectileSpawn[i].rotation;
-                    bullets[i, index].SetOwnerColor(ownerColor);
-                    bullets[i, index].gameObject.SetActive(true);
-
+                    bullets[i, index].GameObjectEnable();
                 }
             }
+
             if (!shells[index].gameObject.activeSelf) {
                 shells[index].position = shellEjection.position;
                 shells[index].rotation = shellEjection.rotation;
@@ -118,6 +125,7 @@ public class Gun : MonoBehaviour
                 muzzleflash.Activate();
             }
             
+            OnShoot();
             //recoil
             transform.localPosition -= Vector3.forward * .2f;
             recoilAngle += Random.Range(recoilAngleMinMax.x, recoilAngleMinMax.y);
@@ -128,10 +136,10 @@ public class Gun : MonoBehaviour
     }
 
     public void Reload() {
-        if (!isReloading && projectilesRemainingInMag != projectilesPerMag) {
+        if (!isReloading && projectilesRemainingInMag != projectilesPerMag && ((currentAmmo > 0) || (maxAmmo < 0))) {
             AudioManager.Instance.PlaySound(reloadAudio, transform.position);
             StartCoroutine(AnimateReload());
-            }
+        }
     }
 
     IEnumerator AnimateReload() {
@@ -152,8 +160,15 @@ public class Gun : MonoBehaviour
             yield return null;
         }
 
+        // * ReloadFunction
         isReloading = false;
-        projectilesRemainingInMag = projectilesPerMag;
+        if ((currentAmmo >= projectilesPerMag) || (maxAmmo == -1)) {
+            projectilesRemainingInMag = projectilesPerMag;
+        }
+        else {
+            projectilesRemainingInMag = currentAmmo;
+        }
+        OnReload();
     }
 
     public void Aim(Vector3 aimPoint) {
@@ -168,5 +183,12 @@ public class Gun : MonoBehaviour
     public void OnTriggerRelease() {
         triggerReleasedSinceLastShot = true;
         shotsRemainingInBurst = burstCount;
+    }
+
+    public void AcquireAmmo() {
+        currentAmmo = (currentAmmo + defaultAmmo > maxAmmo) ? maxAmmo : currentAmmo + defaultAmmo;
+    }
+    public void AcquireAmmo(int ammo) {
+        currentAmmo = (currentAmmo + ammo > maxAmmo) ? maxAmmo : currentAmmo + ammo;
     }
 }

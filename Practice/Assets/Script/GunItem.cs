@@ -5,7 +5,7 @@ using UnityEngine;
 public class GunItem : Item
 {
     int maxGunNum;
-    int gunNum;
+    public int gunNum;
     public Texture[] textures;
 
     protected override void Start()
@@ -19,7 +19,7 @@ public class GunItem : Item
     public void SetGunItem(int _gunNum)
     {
         gunNum = _gunNum;
-        Debug.Log(gunNum);
+        //Debug.Log(gunNum);
         GetComponent<Renderer>().material.mainTexture = textures[gunNum];
     }
 
@@ -29,7 +29,7 @@ public class GunItem : Item
         if(other.gameObject.tag == "Player")
         {
             GunController gunController = other.GetComponent<GunController>();
-            gunController.EquipGun(gunNum, other.GetComponent<Renderer>().material.color);
+            gunController.AcquireGun(gunNum);
             AudioManager.Instance.PlaySound(gunController.allGuns[gunNum].reloadAudio, transform.position);
             Destroy(gameObject);
         }

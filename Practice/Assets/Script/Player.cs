@@ -30,7 +30,6 @@ public class Player : LivingEntity
 
     void OnNewWave(int waveNumber) {
         health = startingHealth;
-        gunController.EquipGun(0, skinMaterial.color);
     }
 
     protected override void Die() {
@@ -82,17 +81,36 @@ public class Player : LivingEntity
         // Color Change Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            controller.ChangeColor(skinMaterial, gunController, 'r');
+            controller.ChangeColor(skinMaterial, 'r');
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            controller.ChangeColor(skinMaterial, gunController, 'g');
+            controller.ChangeColor(skinMaterial, 'g');
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            controller.ChangeColor(skinMaterial, gunController, 'b');
+            controller.ChangeColor(skinMaterial, 'b');
         }
+
+        int allGunNum = gunController.allGuns.Length;
         
+        if (Input.GetAxis("Mouse ScrollWheel") > 0) {
+            int index;
+            for (index = (gunController.currnetGunIndex - 1) % allGunNum; !gunController.acquiredGuns[index];
+            index = (index - 1) % allGunNum) {}
+            print(index);
+            gunController.EquipGun(index);
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") < 0) {
+            int index;
+            for (index = (gunController.currnetGunIndex + 1) % allGunNum; !gunController.acquiredGuns[index];
+            index = (index + 1) % allGunNum) {}
+            print(index);
+            gunController.EquipGun(index);
+        }
+
+        //* */ 마우스 스크롤로 무기 변환
 
     }
 

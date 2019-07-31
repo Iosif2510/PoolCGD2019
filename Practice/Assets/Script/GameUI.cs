@@ -11,12 +11,17 @@ public class GameUI : MonoBehaviour
     public GameObject inGameUI;
     public GameObject pauseUI;
 
+    [Header("New Wave UI")]
     public RectTransform newWaveBanner;
     public Text newWaveTitle;
     public Text newWaveEnemyCount;
+    [Header("Game Over UI")]
     public Text scoreUI;
     public Text gameOverScoreUI;
     public Text highScoreUI;
+
+    [Header("Wave Enemy Status UI")]
+    public Text currentWaveUI;
 
     public Text currentEnemyLeftUI;
 
@@ -24,25 +29,75 @@ public class GameUI : MonoBehaviour
 
     Spawner spawner;
     Player player;
+    PlayerController playerController;
+
+
+    [Header("Heart Status UI")]
+    public Transform heartsParent;
+    public GameObject heartContainerPrefab;
+
+    private GameObject[] heartContainers;
+    private Image[] heartFills;
+
+    [Header("Color Change UI")]
+    public Image currentColor;
+    public Image redColor;
+    public Image greenColor;
+    public Image blueColor;
+    Color redColorFade = new Color(1, 0, 0, 0.5f);
+    Color greenColorFade = new Color(0, 1, 0, 0.5f);
+    Color blueColorFade = new Color(0, 0, 1, 0.5f);
+
+    [Header("Current Weapon UI")]
+    public Transform ammoParent;
+    public GameObject ammoPrefab;
+    public Text ammoText;
+    public GameObject[] allGunsUI;
+    public Transform gunContainer;
+
+    private int currentGunUIIndex = 0;
+    private GameObject currnetGunShow;
+    private Vector3 gunShowPosition = new Vector3(-38, 12, -5);
+    private Quaternion gunShowRotation = Quaternion.Euler(0, 90, 0);
+    private Vector3 gunShowScale = new Vector3(150, 150, 150);
+    private GameObject[] ammo;
+
+    int currentAmmo;
+    int maxAmmo;
+    int ammoRemainingInMag;
+
+    GunController gunController;
 
     void Awake() {
         spawner = FindObjectOfType<Spawner>();
         spawner.OnNewWave += OnNewWave;
+        player = FindObjectOfType<Player>();
+        player.OnDeath += OnGameOver;
+        playerController = player.GetComponent<PlayerController>();
+        playerController.onColorChange += UpdateColorHUD;
+        gunController = player.GetComponent<GunController>();
+
+        Gun.OnShoot += ShootAmmoShow;
+        Gun.OnReload += ReloadAmmoShow;
+        gunController.OnEquipGun += ResetAmmoShow;
+        gunController.OnEquipGun += CurrentWeaponShow;
+
+        InstantiateAmmoContainers();
     }
 
     void Start() {
-        player = FindObjectOfType<Player>();
-        player.OnDeath += OnGameOver;
+        player.OnHealthChange += UpdateHeartsHUD;
+        heartContainers = new GameObject[player.healthLimit];
+        heartFills = new Image[player.healthLimit];
+
+        InstantiateHeartContainers();
+        UpdateHeartsHUD();
     }
 
     void Update() {
-        
-        if (scoreUI != null) scoreUI.text = ScoreKeeper.score.ToString("D6");
-        currentEnemyLeftUI.text = $"{spawner.enemiesRemainingAlive} Enemies Left";
-        float healthPercent = 0;
-        if (player != null) {
-            healthPercent = player.health / player.startingHealth;
-        }
+        if (scoreUI != null) scoreUI.text = $"Score: {ScoreKeeper.score.ToString("D6")}";
+        currentEnemyLeftUI.text = $"Enemies Left: {spawner.enemiesRemainingAlive}";
+        if (Input.GetKeyDown(KeyCode.Escape)) Pause();
     }
 
 
@@ -50,11 +105,11 @@ public class GameUI : MonoBehaviour
         if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
             newWaveTitle.text = $"- Wave {waveNumber} -";
             newWaveEnemyCount.text = $"Enemies: {spawner.currentWave.enemyCount}";
-            
+            currentWaveUI.text = $"Wave {waveNumber}";
+
             StopCoroutine("AnimateNewWaveBanner");
             StartCoroutine("AnimateNewWaveBanner");
         } 
-
     }
 
     IEnumerator AnimateNewWaveBanner() {
@@ -130,4 +185,112 @@ public class GameUI : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("GameMenu");
     }
+
+    //Heart Control
+
+    public void UpdateHeartsHUD() {
+        SetHeartContainers();
+        SetFilledHearts();
+    }
+
+    public void UpdateColorHUD() {
+        Color playerColor = playerController.playerColor;
+        currentColor.color = playerColor;
+        redColor.color = playerColor.r == 1 ? Color.red : redColorFade;
+        greenColor.color = playerColor.g == 1 ? Color.green : greenColorFade;
+        blueColor.color = playerColor.b == 1 ? Color.blue : blueColorFade;
+    }
+
+    void SetHeartContainers() {
+        for (int i = 0; i < heartContainers.Length; i++)
+        {
+            if (i < player.maxHealth)
+            {
+                heartContainers[i].SetActive(true);
+            }
+            else
+            {
+                heartContainers[i].SetActive(false);
+            }
+        }
+    }
+
+    void SetFilledHearts() {
+        for (int i = 0; i < heartFills.Length; i++)
+        {
+            if (i < player.health)
+            {
+                heartFills[i].fillAmount = 1;
+            }
+            else
+            {
+                heartFills[i].fillAmount = 0;
+            }
+        }
+    }
+
+    void InstantiateHeartContainers() {
+        for (int i = 0; i < player.healthLimit; i++)
+        {
+            heartContainers[i] = Instantiate(heartContainerPrefab);
+            heartContainers[i].transform.SetParent(heartsParent, false);
+            heartFills[i] = heartContainers[i].transform.Find("HeartFill").GetComponent<Image>();
+        }
+    }
+
+    public void CurrentWeaponShow() {
+        allGunsUI[currentGunUIIndex].SetActive(false);
+        currentGunUIIndex = gunController.currnetGunIndex;
+        allGunsUI[currentGunUIIndex].SetActive(true);
+    }
+
+    void InstantiateAmmoContainers() {
+        ammo = new GameObject[40];
+        for (int i = 0; i < ammo.Length; i++) {
+            ammo[i] = Instantiate(ammoPrefab);
+            ammo[i].transform.SetParent(ammoParent, false);
+            ammo[i].SetActive(false);
+        }
+    }
+
+    public void ResetAmmoShow() {
+        /*         
+        print("reset ammo show called");
+        print($"current gun: {gunController.equippedGun}");
+        print($"ammo Length: {ammo.Length}");
+        */
+
+        currentAmmo = gunController.equippedGun.currentAmmo / gunController.equippedGun.projectileSpawn.Length;
+        maxAmmo = gunController.equippedGun.maxAmmo / gunController.equippedGun.projectileSpawn.Length;
+        ammoRemainingInMag = gunController.equippedGun.projectilesRemainingInMag / gunController.equippedGun.projectileSpawn.Length;
+
+        ammoText.text = $"{currentAmmo} / {maxAmmo}";
+        for (int i = 0; i < ammo.Length; i++) {
+            //print(gunController.equippedGun.projectilesRemainingInMag);
+            if (i < ammoRemainingInMag)
+            {
+                print("Ammo SetActive");
+                ammo[i].SetActive(true);
+            }
+            else
+            {
+                print("Ammo SetInactive");
+                ammo[i].SetActive(false);
+            }
+        }
+    }
+
+    void ReloadAmmoShow() {
+        ResetAmmoShow();
+    }
+
+    public void ShootAmmoShow() {
+        currentAmmo = gunController.equippedGun.currentAmmo / gunController.equippedGun.projectileSpawn.Length;
+        maxAmmo = gunController.equippedGun.maxAmmo / gunController.equippedGun.projectileSpawn.Length;
+        ammoRemainingInMag = gunController.equippedGun.projectilesRemainingInMag / gunController.equippedGun.projectileSpawn.Length;
+
+        ammoText.text = $"{currentAmmo} / {maxAmmo}";
+        ammo[ammoRemainingInMag].SetActive(false);
+    }
+
 }
