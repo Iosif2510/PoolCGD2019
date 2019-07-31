@@ -43,5 +43,7 @@ public class WhiteDeathEffect : MonoBehaviour
         }
 
         isFadingOut = false;
+
+        Destroy(gameObject);
     }
 }

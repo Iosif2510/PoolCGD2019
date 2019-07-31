@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
     float speed = 10;
     int damage = 1;
     float knockbackForce;
+    bool penetration;
     Color ownerColor;
 
     //* shooting
@@ -32,6 +33,11 @@ public class Projectile : MonoBehaviour
     public void SetKnockbackForce(float _knockbackForce)
     {
         knockbackForce = _knockbackForce;
+    }
+    
+    public void SetPenetration(bool _penetration)
+    {
+        penetration = _penetration;
     }
 
     public void GameObjectEnable() {
@@ -73,14 +79,14 @@ public class Projectile : MonoBehaviour
     {
         LivingEntity attacked = c.GetComponent<LivingEntity>();
         if (attacked != null) attacked.TakeHit(shooterColor, hitPoint, transform.forward, knockbackForce);
-        Disable();
+        if(!penetration) Disable();
     }
 
     void OnhitObject(Collider c, Vector3 hitPoint) {
         IDamageable damageableObj = c.GetComponent<IDamageable>();
         if (damageableObj != null) damageableObj.TakeHit(damage, hitPoint, transform.forward);
         //print(hit.collider.gameObject.name);
-        Disable();
+        if (!penetration) Disable();
     }
 
     void Disable() {

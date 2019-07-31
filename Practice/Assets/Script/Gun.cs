@@ -27,6 +27,8 @@ public class Gun : MonoBehaviour
     public int defaultAmmo;
     public int projectilesPerMag;
     public int projectilesRemainingInMag;
+    
+    public bool penetration = false;
 
     Projectile[,] bullets;
     Transform[] shells;
@@ -70,6 +72,7 @@ public class Gun : MonoBehaviour
                 bullets[j,i].gameObject.SetActive(false);
                 bullets[j,i].SetSpeed(muzzleVelocity);
                 bullets[j,i].SetKnockbackForce(knockbackForce);
+                bullets[j,i].SetPenetration(penetration);
             }
             shells[i] = Instantiate(shell) as Transform;
             shells[i].gameObject.SetActive(false);
