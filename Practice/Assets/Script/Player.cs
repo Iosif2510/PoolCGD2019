@@ -96,8 +96,8 @@ public class Player : LivingEntity
         
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
             int index;
-            for (index = (gunController.currnetGunIndex - 1) % allGunNum; !gunController.acquiredGuns[index];
-            index = (index - 1) % allGunNum) {}
+            for (index = positiveMod(gunController.currnetGunIndex - 1, allGunNum); !gunController.acquiredGuns[index];
+            index = positiveMod(index - 1, allGunNum)) {}
             print(index);
             gunController.EquipGun(index);
         }
@@ -112,6 +112,10 @@ public class Player : LivingEntity
 
         //* */ 마우스 스크롤로 무기 변환
 
+    }
+
+    int positiveMod(int n1, int n2) {
+        return (n1 % n2 >= 0) ? n1 % n2 : n1 % n2 + n2;
     }
 
 }

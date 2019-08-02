@@ -136,6 +136,8 @@ public class GameUI : MonoBehaviour
 
     void OnGameOver()
     {
+        Gun.OnShoot -= ShootAmmoShow;
+        Gun.OnReload -= ReloadAmmoShow;
         if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
             StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .9f), 1));
             gameOverScoreUI.text = scoreUI.text;
@@ -263,7 +265,7 @@ public class GameUI : MonoBehaviour
         currentAmmo = gunController.equippedGun.currentAmmo / gunController.equippedGun.projectileSpawn.Length;
         maxAmmo = gunController.equippedGun.maxAmmo / gunController.equippedGun.projectileSpawn.Length;
         ammoRemainingInMag = gunController.equippedGun.projectilesRemainingInMag / gunController.equippedGun.projectileSpawn.Length;
-        
+
         if (gunController.currnetGunIndex == 0) ammoText.text = "∞";
         else ammoText.text = $"{currentAmmo} / {maxAmmo}";
         for (int i = 0; i < ammo.Length; i++) {
@@ -292,7 +294,7 @@ public class GameUI : MonoBehaviour
 
         if (gunController.currnetGunIndex == 0) ammoText.text = "∞";
         else ammoText.text = $"{currentAmmo} / {maxAmmo}";
-        ammo[ammoRemainingInMag].SetActive(false);
+         ammo[ammoRemainingInMag].SetActive(false);
     }
 
 }

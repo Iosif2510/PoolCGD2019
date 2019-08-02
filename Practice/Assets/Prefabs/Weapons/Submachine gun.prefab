@@ -495,7 +495,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4840247139122948053}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.0011776853, y: -0.17332436, z: 0.0002072586, w: 0.98486406}
   m_LocalPosition: {x: 0, y: 1.21, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -527,10 +527,11 @@ MonoBehaviour:
   reloadTime: 0.3
   knockbackForce: 0
   maxAmmo: 200
-  currentAmmo: 0
+  currentAmmo: 30
   defaultAmmo: 30
   projectilesPerMag: 30
   projectilesRemainingInMag: 0
+  penetration: 0
   bulletAmount: 30
   kickMinMax: {x: 0.05, y: 0.2}
   recoilAngleMinMax: {x: 3, y: 5}
