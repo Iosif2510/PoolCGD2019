@@ -952,9 +952,13 @@ MonoBehaviour:
   burstCount: 0
   reloadTime: 0.3
   knockbackForce: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  defaultAmmo: 15
+  projectilesPerMag: 15
+  projectilesRemainingInMag: 0
   penetration: 1
-  bulletAmount: 10
-  ownerColor: {r: 0, g: 0, b: 0, a: 0}
+  bulletAmount: 15
   kickMinMax: {x: 0.05, y: 2}
   recoilAngleMinMax: {x: 3, y: 5}
   recoilMoveSettleTime: 0.1
