@@ -247,7 +247,7 @@ public class GameUI : MonoBehaviour
     }
 
     void InstantiateAmmoContainers() {
-        ammo = new GameObject[40];
+        ammo = new GameObject[60];
         for (int i = 0; i < ammo.Length; i++) {
             ammo[i] = Instantiate(ammoPrefab);
             ammo[i].transform.SetParent(ammoParent, false);

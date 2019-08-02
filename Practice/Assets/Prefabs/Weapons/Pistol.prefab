@@ -442,9 +442,8 @@ MonoBehaviour:
   msBtwShots: 100
   muzzleVelocity: 20
   burstCount: 3
-  reloadTime: 0.3
+  reloadTime: 0.5
   knockbackForce: 0
-  maxAmmo: -1
   currentAmmo: -1
   defaultAmmo: 0
   projectilesPerMag: 12

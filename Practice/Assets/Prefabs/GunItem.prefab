@@ -104,9 +104,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c486b0de6d9c22a42be98758d52e9530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: 40
+  timeToDisappear: 5
+  gunNum: 0
   textures:
   - {fileID: 0}
   - {fileID: 2800000, guid: 8d5dedbe4cd819a44aea3a49586f1f30, type: 3}
   - {fileID: 2800000, guid: e724c42bb67603a4db16b7371c75507e, type: 3}
-  rotateSpeed: 40
-  timeToDisappear: 5
+  - {fileID: 2800000, guid: e724c42bb67603a4db16b7371c75507e, type: 3}
+  - {fileID: 2800000, guid: e724c42bb67603a4db16b7371c75507e, type: 3}
+  - {fileID: 2800000, guid: e724c42bb67603a4db16b7371c75507e, type: 3}
