@@ -10,6 +10,7 @@ public class Spawner : MonoBehaviour
     }
 
     public bool devMode;
+    bool dummyCreating = false;
 
     public Wave[] waves;
     public Enemy enemy;
@@ -47,6 +48,7 @@ public class Spawner : MonoBehaviour
     bool isDisabled;
 
     public event System.Action<int> OnNewWave;
+    public event System.Action TutorialClear;
 
     void Awake() {
         if (instance != null && instance != this) {
@@ -141,7 +143,7 @@ public class Spawner : MonoBehaviour
         float tileFlashSpeed = 4;
 
         Transform spawnTile = map.GetRandomOpenTile();
-        if (isCamping) spawnTile = map.GetTileFromPosition(playerT.position);
+        if (isCamping && currentWave.campingCheck) spawnTile = map.GetTileFromPosition(playerT.position);
 
         Material tileMat = spawnTile.GetComponent<Renderer>().material;
         Color initialColor = Color.white;
@@ -163,6 +165,10 @@ public class Spawner : MonoBehaviour
         spawnedEnemy.OnDeathPosition += OnEnemyDeath;
         if (deathParticlesDict.ContainsKey(enemyColorState)) {
             spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, enemyColor, deathParticlesDict[enemyColorState]);
+        }
+        if (dummyCreating)
+        {
+            spawnedEnemy.SetDummy(true);
         }
 
         if (tileMat.color != initialColor) tileMat.color = initialColor;
@@ -245,8 +251,19 @@ public class Spawner : MonoBehaviour
             //print($"Gun Drop Chance: {currentWave.gunDropChance}");
         }
 
-        else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
-            //todo Tutorial Clear!
+        if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
+            if (currentWaveNumber == 2)
+                dummyCreating = true;
+            else
+                dummyCreating = false;
+
+            if (currentWaveNumber > waves.Length)
+            {
+                isDisabled = true;
+                if (TutorialClear != null)
+                    TutorialClear();
+                return;
+            }
         }
 
         enemiesRemainingToSpawn = currentWave.enemyCount;
@@ -277,6 +294,7 @@ public class Spawner : MonoBehaviour
     public class Wave {
         public int enemyCount;
         public float timeBetweenSpawns;
+        public bool campingCheck = true;
 
         public float moveSpeed;
 
