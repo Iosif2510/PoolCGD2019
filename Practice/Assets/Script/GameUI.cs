@@ -305,7 +305,7 @@ public class GameUI : MonoBehaviour
             //print(gunController.equippedGun.projectilesRemainingInMag);
             if (i < ammoRemainingInMag)
             {
-                print("Ammo SetActive");
+                //print("Ammo SetActive");
                 ammo[i].SetActive(true);
             }
             else

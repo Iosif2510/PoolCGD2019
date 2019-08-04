@@ -9,8 +9,12 @@ public class Spawner : MonoBehaviour
         get { return instance; }
     }
 
+    public enum GameMode { Infinite, Tutorial};
+    GameMode currentMode;
+
     public bool devMode;
     bool dummyCreating = false;
+    int spawnOrder = 0;
 
     public Wave[] waves;
     public Enemy enemy;
@@ -69,6 +73,10 @@ public class Spawner : MonoBehaviour
         playerEntity.OnDeath += OnPlayerDeath;
 
         map = FindObjectOfType<MapGenerator>();
+        if (map.currentMode == MapGenerator.GameMode.Infinite)
+            currentMode = GameMode.Infinite;
+        else
+            currentMode = GameMode.Tutorial;
 
         /*
         spawnedElevator = Instantiate(elevator, Vector3.zero, Quaternion.identity) as Elevator;
@@ -148,9 +156,18 @@ public class Spawner : MonoBehaviour
         Material tileMat = spawnTile.GetComponent<Renderer>().material;
         Color initialColor = Color.white;
 
-        int chooseEnemy = Random.Range(0, currentWave.colorsToSpawn.Length);
-        ColorState enemyColorState = currentWave.colorsToSpawn[chooseEnemy];
-        Color enemyColor = ReturnColor(enemyColorState); //적의 색깔과 스폰 장소 색깔을 결정
+        ColorState enemyColorState;
+
+        if (dummyCreating) //모든 색깔 순서대로
+        {
+            enemyColorState = currentWave.colorsToSpawn[spawnOrder++ % 6];
+        }
+        else //랜덤 색깔
+        {
+            int chooseEnemy = Random.Range(0, currentWave.colorsToSpawn.Length);
+            enemyColorState = currentWave.colorsToSpawn[chooseEnemy];
+        }
+        Color enemyColor = ReturnColor(enemyColorState);
         float spawnTimer = 0;
 
         while(spawnTimer < spawnDelay) {
@@ -206,6 +223,8 @@ public class Spawner : MonoBehaviour
             int randomItemIndex = (int)Random.Range(1,gunController.allGuns.Length);
             //Debug.Log(randomItemIndex);
             spawnedGunItem.SetGunItem(randomItemIndex);
+            if (currentMode == GameMode.Tutorial)
+                spawnedGunItem.SetDisappearance(false);
         }
         if (enemiesRemainingAlive == 0) {
             //todo enable elevator
@@ -214,7 +233,7 @@ public class Spawner : MonoBehaviour
     }
 
     public void ResetPlayerPosition() {
-        if ((map.currentMode == MapGenerator.GameMode.Tutorial) && (currentWave == waves[0])) {
+        if ((currentMode == GameMode.Tutorial) && (currentWave == waves[0])) {
             playerT.position = map.GetTileFromPosition(new Vector3(2, 0, 3)).position + Vector3.up * 3;
         }
         else playerT.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up * 3;
@@ -232,7 +251,7 @@ public class Spawner : MonoBehaviour
             currentWave = waves[currentWaveNumber - 1];
         }
         
-        else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
+        else if (currentMode == GameMode.Infinite) {
             //print("Random Wave: " + currentWaveNumber);
             System.Random psrd = new System.Random();
             currentWave = new Wave();
@@ -251,7 +270,7 @@ public class Spawner : MonoBehaviour
             //print($"Gun Drop Chance: {currentWave.gunDropChance}");
         }
 
-        if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
+        if (currentMode == GameMode.Tutorial) {
             if (currentWaveNumber == 2)
                 dummyCreating = true;
             else
