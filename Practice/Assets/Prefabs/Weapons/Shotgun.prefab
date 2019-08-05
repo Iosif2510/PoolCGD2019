@@ -664,16 +664,16 @@ MonoBehaviour:
   - {fileID: 5652776280121372154}
   - {fileID: 3595607746227412442}
   projectile: {fileID: 1085166811, guid: e4913c99c8749447c883ca6cb1d85648, type: 3}
-  msBtwShots: 100
-  muzzleVelocity: 35
+  msBtwShots: 250
+  muzzleVelocity: 20
   burstCount: 3
-  reloadTime: 0.3
+  reloadTime: 1
   knockbackForce: 0.1
-  maxAmmo: 100
   currentAmmo: 100
   defaultAmmo: 20
   projectilesPerMag: 7
   projectilesRemainingInMag: 0
+  penetration: 0
   bulletAmount: 7
   kickMinMax: {x: 0.05, y: 0.2}
   recoilAngleMinMax: {x: 3, y: 5}

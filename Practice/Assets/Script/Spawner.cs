@@ -38,7 +38,7 @@ public class Spawner : MonoBehaviour
 
     MapGenerator map;
 
-    float timeBtwCampingChecks = 3;
+    public float timeBtwCampingChecks = 6;
     float campThresholdDistance = 1.5f; 
     float nextCampCheckTime;
     Vector3 campPositionOld;
@@ -106,6 +106,7 @@ public class Spawner : MonoBehaviour
     }
 
     void Update() {
+        IEnumerator spawnEnemy = SpawnEnemy();
         if (!isDisabled) {
             //Camping Check
             if (Time.time > nextCampCheckTime) {
@@ -120,13 +121,13 @@ public class Spawner : MonoBehaviour
                 enemiesRemainingToSpawn--;
                 nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
 
-                StartCoroutine("SpawnEnemy");
+                StartCoroutine(spawnEnemy);
             }
         }
 
         if (devMode) {
             if (Input.GetKeyDown(KeyCode.Return)) {
-                StopCoroutine("SpawnEnemy");
+                StopCoroutine(spawnEnemy);
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>()) {
                     Destroy(enemy.gameObject);
                 }
@@ -137,7 +138,7 @@ public class Spawner : MonoBehaviour
     }
 
     IEnumerator SpawnEnemy() {
-        float spawnDelay = 1;
+        float spawnDelay = 1.5f;
         float tileFlashSpeed = 4;
 
         Transform spawnTile = map.GetRandomOpenTile();
