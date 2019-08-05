@@ -164,8 +164,6 @@ public class GameUI : MonoBehaviour
 
     void OnGameOver()
     {
-        Gun.OnShoot -= ShootAmmoShow;
-        Gun.OnReload -= ReloadAmmoShow;
         if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
             StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .9f), 1));
             gameOverScoreUI.text = scoreUI.text;
@@ -206,20 +204,27 @@ public class GameUI : MonoBehaviour
         }
     }
 
+    void BeforeLoadScene()
+    {
+        Time.timeScale = 1;
+        Gun.OnShoot -= ShootAmmoShow;
+        Gun.OnReload -= ReloadAmmoShow;
+    }
+
     //UI input
     public void StartNewGame() {
-        Time.timeScale = 1;
+        BeforeLoadScene();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ReturnToMainMenu() {
-        Time.timeScale = 1;
+        BeforeLoadScene();
         SceneManager.LoadScene("GameMenu");
     }
 
     public void ToInfinite()
     {
-        Time.timeScale = 1;
+        BeforeLoadScene();
         SceneManager.LoadScene("Infinite");
     }
 
