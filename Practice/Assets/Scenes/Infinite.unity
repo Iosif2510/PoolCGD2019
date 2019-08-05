@@ -1500,6 +1500,7 @@ MonoBehaviour:
   gunItem: {fileID: 541812804097702703, guid: e55b8f1fc407fcd4fbe5174cdb957ee5, type: 3}
   elevator: {fileID: 8589872790367442026, guid: 69ac6f053e5244c8287bed2e37e84a6e,
     type: 3}
+  timeBtwCampingChecks: 6
 --- !u!4 &172184276
 Transform:
   m_ObjectHideFlags: 0
@@ -7401,7 +7402,7 @@ PrefabInstance:
     - target: {fileID: 541812804097702703, guid: e55b8f1fc407fcd4fbe5174cdb957ee5,
         type: 3}
       propertyPath: gunNum
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 541812804097702700, guid: e55b8f1fc407fcd4fbe5174cdb957ee5,
         type: 3}
