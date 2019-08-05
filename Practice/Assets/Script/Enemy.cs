@@ -7,6 +7,7 @@ public class Enemy : LivingEntity
 {
     public enum State { Idle, Chasing, Attacking };
     State currentState;
+    public bool isDummy = false;
 
     public ParticleSystem deathEffect;
     public WhiteDeathEffect whiteDeathEffect;
@@ -59,7 +60,7 @@ public class Enemy : LivingEntity
     {
         base.Start();
         
-        if (hasTarget) {
+        if (hasTarget && !isDummy) {
             currentState = State.Chasing;
             targetEntity.OnDeath += OnTargetDeath;
 
@@ -106,7 +107,7 @@ public class Enemy : LivingEntity
 
     void Update()
     {
-        if (hasTarget) {
+        if (hasTarget && !isDummy) {
             if (Time.time > nextAttackTime) {
                 float sqrDstToTarget = (target.position - transform.position).sqrMagnitude;
                 if (sqrDstToTarget < Mathf.Pow(attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2)) {
@@ -126,6 +127,12 @@ public class Enemy : LivingEntity
         deathEffect = _deathEffect;
         skinMaterial.color = ownColor;
     }
+    public void SetDummy(bool _isDummy)
+    {
+        isDummy = _isDummy;
+        if (isDummy) currentState = State.Idle;
+        else currentState = State.Chasing;
+    }
 
     protected override void Die() {
         /*
@@ -142,6 +149,7 @@ public class Enemy : LivingEntity
 
     IEnumerator Knockback(Vector3 hitDirection, float knockbackForce)
     {
+        State beforeState = currentState;
         currentState = State.Idle;
         float knockbackTime = 0.1f;
         while(knockbackTime >= 0)
@@ -150,7 +158,7 @@ public class Enemy : LivingEntity
             knockbackTime -= Time.deltaTime;
             yield return null;
         }
-        currentState = State.Chasing;
+        currentState = beforeState;
         if (skinMaterial.color == Color.white)
         { //Death Effect
             if (OnDeathStatic != null) OnDeathStatic();

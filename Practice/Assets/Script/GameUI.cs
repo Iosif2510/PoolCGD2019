@@ -10,6 +10,11 @@ public class GameUI : MonoBehaviour
     public GameObject gameOverUI;
     public GameObject inGameUI;
     public GameObject pauseUI;
+    public GameObject tutorialUI;
+
+    [Header("Tutorial UI")]
+    public GameObject[] tutorialWaves;
+    public GameObject tutorialClear;
 
     [Header("New Wave UI")]
     public RectTransform newWaveBanner;
@@ -26,6 +31,7 @@ public class GameUI : MonoBehaviour
     public Text currentEnemyLeftUI;
 
     bool isPaused = false;
+    bool pauseDisabled = false;
 
     Spawner spawner;
     Player player;
@@ -71,6 +77,7 @@ public class GameUI : MonoBehaviour
     void Awake() {
         spawner = FindObjectOfType<Spawner>();
         spawner.OnNewWave += OnNewWave;
+        spawner.TutorialClear += OnTutorialClear;
         player = FindObjectOfType<Player>();
         player.OnDeath += OnGameOver;
         playerController = player.GetComponent<PlayerController>();
@@ -86,6 +93,8 @@ public class GameUI : MonoBehaviour
     }
 
     void Start() {
+        if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial)
+            tutorialUI.SetActive(true);
         player.OnHealthChange += UpdateHeartsHUD;
         heartContainers = new GameObject[player.healthLimit];
         heartFills = new Image[player.healthLimit];
@@ -97,19 +106,38 @@ public class GameUI : MonoBehaviour
     void Update() {
         if (scoreUI != null) scoreUI.text = $"Score: {ScoreKeeper.score.ToString("D6")}";
         currentEnemyLeftUI.text = $"Enemies Left: {spawner.enemiesRemainingAlive}";
-        if (Input.GetKeyDown(KeyCode.Escape)) Pause();
+        if (Input.GetKeyDown(KeyCode.Escape) && !pauseDisabled) Pause();
     }
 
+    void OnTutorialClear()
+    {
+        pauseDisabled = true;
+        Time.timeScale = 0;
+        tutorialWaves[tutorialWaves.Length - 1].SetActive(false);
+        tutorialClear.SetActive(true);
+    }
 
     void OnNewWave(int waveNumber) {
-        if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
-            newWaveTitle.text = $"- Wave {waveNumber} -";
-            newWaveEnemyCount.text = $"Enemies: {spawner.currentWave.enemyCount}";
-            currentWaveUI.text = $"Wave {waveNumber}";
+        newWaveTitle.text = $"- Wave {waveNumber} -";
+        newWaveEnemyCount.text = $"Enemies: {spawner.currentWave.enemyCount}";
+        currentWaveUI.text = $"Wave {waveNumber}";
 
-            StopCoroutine("AnimateNewWaveBanner");
-            StartCoroutine("AnimateNewWaveBanner");
-        } 
+        StopCoroutine("AnimateNewWaveBanner");
+        StartCoroutine("AnimateNewWaveBanner");
+
+        if(MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial)
+        {
+            if (waveNumber == 1)
+            {
+                inGameUI.transform.Find("ColorChangeUI").gameObject.SetActive(false);
+            }
+            else
+            {
+                tutorialWaves[waveNumber - 2].SetActive(false);
+                tutorialWaves[waveNumber - 1].SetActive(true);
+                inGameUI.transform.Find("ColorChangeUI").gameObject.SetActive(true);
+            }
+        }
     }
 
     IEnumerator AnimateNewWaveBanner() {
@@ -180,12 +208,19 @@ public class GameUI : MonoBehaviour
 
     //UI input
     public void StartNewGame() {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ReturnToMainMenu() {
         Time.timeScale = 1;
         SceneManager.LoadScene("GameMenu");
+    }
+
+    public void ToInfinite()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Infinite");
     }
 
     //Heart Control
@@ -271,7 +306,7 @@ public class GameUI : MonoBehaviour
             //print(gunController.equippedGun.projectilesRemainingInMag);
             if (i < ammoRemainingInMag)
             {
-                print("Ammo SetActive");
+                //print("Ammo SetActive");
                 ammo[i].SetActive(true);
             }
             else

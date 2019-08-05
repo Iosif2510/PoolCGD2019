@@ -131,6 +131,7 @@ public class Gun : MonoBehaviour
             recoilAngle = Mathf.Clamp(recoilAngle, 0, 30);
 
             AudioManager.Instance.PlaySound(shootAudio, transform.position);
+            print("Shoot!");
         }
     }
 

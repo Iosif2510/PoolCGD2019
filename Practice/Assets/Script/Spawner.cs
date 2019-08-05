@@ -9,7 +9,12 @@ public class Spawner : MonoBehaviour
         get { return instance; }
     }
 
+    public enum GameMode { Infinite, Tutorial};
+    GameMode currentMode;
+
     public bool devMode;
+    bool dummyCreating = false;
+    int spawnOrder = 0;
 
     public Wave[] waves;
     public Enemy enemy;
@@ -47,6 +52,7 @@ public class Spawner : MonoBehaviour
     bool isDisabled;
 
     public event System.Action<int> OnNewWave;
+    public event System.Action TutorialClear;
 
     void Awake() {
         if (instance != null && instance != this) {
@@ -67,6 +73,10 @@ public class Spawner : MonoBehaviour
         playerEntity.OnDeath += OnPlayerDeath;
 
         map = FindObjectOfType<MapGenerator>();
+        if (map.currentMode == MapGenerator.GameMode.Infinite)
+            currentMode = GameMode.Infinite;
+        else
+            currentMode = GameMode.Tutorial;
 
         /*
         spawnedElevator = Instantiate(elevator, Vector3.zero, Quaternion.identity) as Elevator;
@@ -142,14 +152,23 @@ public class Spawner : MonoBehaviour
         float tileFlashSpeed = 4;
 
         Transform spawnTile = map.GetRandomOpenTile();
-        if (isCamping) spawnTile = map.GetTileFromPosition(playerT.position);
+        if (isCamping && currentWave.campingCheck) spawnTile = map.GetTileFromPosition(playerT.position);
 
         Material tileMat = spawnTile.GetComponent<Renderer>().material;
         Color initialColor = Color.white;
 
-        int chooseEnemy = Random.Range(0, currentWave.colorsToSpawn.Length);
-        ColorState enemyColorState = currentWave.colorsToSpawn[chooseEnemy];
-        Color enemyColor = ReturnColor(enemyColorState); //적의 색깔과 스폰 장소 색깔을 결정
+        ColorState enemyColorState;
+
+        if (dummyCreating) //모든 색깔 순서대로
+        {
+            enemyColorState = currentWave.colorsToSpawn[spawnOrder++ % 6];
+        }
+        else //랜덤 색깔
+        {
+            int chooseEnemy = Random.Range(0, currentWave.colorsToSpawn.Length);
+            enemyColorState = currentWave.colorsToSpawn[chooseEnemy];
+        }
+        Color enemyColor = ReturnColor(enemyColorState);
         float spawnTimer = 0;
 
         while(spawnTimer < spawnDelay) {
@@ -164,6 +183,10 @@ public class Spawner : MonoBehaviour
         spawnedEnemy.OnDeathPosition += OnEnemyDeath;
         if (deathParticlesDict.ContainsKey(enemyColorState)) {
             spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, enemyColor, deathParticlesDict[enemyColorState]);
+        }
+        if (dummyCreating)
+        {
+            spawnedEnemy.SetDummy(true);
         }
 
         if (tileMat.color != initialColor) tileMat.color = initialColor;
@@ -201,6 +224,8 @@ public class Spawner : MonoBehaviour
             int randomItemIndex = (int)Random.Range(1,gunController.allGuns.Length);
             //Debug.Log(randomItemIndex);
             spawnedGunItem.SetGunItem(randomItemIndex);
+            if (currentMode == GameMode.Tutorial)
+                spawnedGunItem.SetDisappearance(false);
         }
         if (enemiesRemainingAlive == 0) {
             //todo enable elevator
@@ -209,7 +234,7 @@ public class Spawner : MonoBehaviour
     }
 
     public void ResetPlayerPosition() {
-        if ((map.currentMode == MapGenerator.GameMode.Tutorial) && (currentWave == waves[0])) {
+        if ((currentMode == GameMode.Tutorial) && (currentWave == waves[0])) {
             playerT.position = map.GetTileFromPosition(new Vector3(2, 0, 3)).position + Vector3.up * 3;
         }
         else playerT.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up * 3;
@@ -227,7 +252,7 @@ public class Spawner : MonoBehaviour
             currentWave = waves[currentWaveNumber - 1];
         }
         
-        else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Infinite) {
+        else if (currentMode == GameMode.Infinite) {
             //print("Random Wave: " + currentWaveNumber);
             System.Random psrd = new System.Random();
             currentWave = new Wave();
@@ -246,8 +271,19 @@ public class Spawner : MonoBehaviour
             //print($"Gun Drop Chance: {currentWave.gunDropChance}");
         }
 
-        else if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
-            //todo Tutorial Clear!
+        if (currentMode == GameMode.Tutorial) {
+            if (currentWaveNumber == 2)
+                dummyCreating = true;
+            else
+                dummyCreating = false;
+
+            if (currentWaveNumber > waves.Length)
+            {
+                isDisabled = true;
+                if (TutorialClear != null)
+                    TutorialClear();
+                return;
+            }
         }
 
         enemiesRemainingToSpawn = currentWave.enemyCount;
@@ -278,6 +314,7 @@ public class Spawner : MonoBehaviour
     public class Wave {
         public int enemyCount;
         public float timeBetweenSpawns;
+        public bool campingCheck = true;
 
         public float moveSpeed;
 

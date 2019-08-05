@@ -13,6 +13,7 @@ public class Player : LivingEntity
     PlayerController controller;
     GunController gunController;
     Camera ViewCamera;
+    public bool isTutorial = false;
 
     protected override void Awake() {
 
@@ -32,6 +33,12 @@ public class Player : LivingEntity
         health = startingHealth;
     }
 
+    public override void TakeDamage(int damage)
+    {
+        if (isTutorial) return;
+
+        base.TakeDamage(damage);
+    }
     protected override void Die() {
         AudioManager.Instance.PlaySound("Player Death", transform.position);
         if (MapGenerator.Instance.currentMode == MapGenerator.GameMode.Tutorial) {
