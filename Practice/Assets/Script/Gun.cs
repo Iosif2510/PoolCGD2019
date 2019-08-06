@@ -106,6 +106,7 @@ public class Gun : MonoBehaviour
                 if (!bullets[i, index].gameObject.activeSelf) {
                     if (projectilesRemainingInMag == 0) break;
                     projectilesRemainingInMag--;
+
                     if (currentAmmo > 0) currentAmmo--;
                     nextShotTime = Time.time + msBtwShots / 1000;
 
@@ -131,6 +132,7 @@ public class Gun : MonoBehaviour
             recoilAngle = Mathf.Clamp(recoilAngle, 0, 30);
 
             AudioManager.Instance.PlaySound(shootAudio, transform.position);
+            //print("Shoot!");
         }
     }
 

@@ -43,7 +43,8 @@ public class GunController : MonoBehaviour
         allGunsObj[weaponIndex].gameObject.SetActive(true);
         equippedGun = allGunsObj[weaponIndex];
         acquiredGuns[weaponIndex] = true;
-        OnEquipGun();
+        if(OnEquipGun != null)
+            OnEquipGun();
         print("OnEquipGun called");
     }
 
