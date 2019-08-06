@@ -263,11 +263,10 @@ public class GameUI : MonoBehaviour
         */
 
         currentAmmo = gunController.equippedGun.currentAmmo / gunController.equippedGun.projectileSpawn.Length;
-        maxAmmo = gunController.equippedGun.maxAmmo / gunController.equippedGun.projectileSpawn.Length;
         ammoRemainingInMag = gunController.equippedGun.projectilesRemainingInMag / gunController.equippedGun.projectileSpawn.Length;
 
-        if (gunController.currnetGunIndex == 0) ammoText.text = "∞";
-        else ammoText.text = $"{currentAmmo} / {maxAmmo}";
+        if (gunController.currnetGunIndex == 0) ammoText.text = $"{ammoRemainingInMag} / ∞";
+        else ammoText.text = $"{ammoRemainingInMag} / {currentAmmo - ammoRemainingInMag}";
         for (int i = 0; i < ammo.Length; i++) {
             //print(gunController.equippedGun.projectilesRemainingInMag);
             if (i < ammoRemainingInMag)
@@ -289,11 +288,10 @@ public class GameUI : MonoBehaviour
 
     public void ShootAmmoShow() {
         currentAmmo = gunController.equippedGun.currentAmmo / gunController.equippedGun.projectileSpawn.Length;
-        maxAmmo = gunController.equippedGun.maxAmmo / gunController.equippedGun.projectileSpawn.Length;
         ammoRemainingInMag = gunController.equippedGun.projectilesRemainingInMag / gunController.equippedGun.projectileSpawn.Length;
 
-        if (gunController.currnetGunIndex == 0) ammoText.text = "∞";
-        else ammoText.text = $"{currentAmmo} / {maxAmmo}";
+        if (gunController.currnetGunIndex == 0) ammoText.text = $"{ammoRemainingInMag} / ∞";
+        else ammoText.text = $"{ammoRemainingInMag} / {currentAmmo - ammoRemainingInMag}";
          ammo[ammoRemainingInMag].SetActive(false);
     }
 

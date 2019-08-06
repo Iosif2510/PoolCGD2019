@@ -439,7 +439,7 @@ MonoBehaviour:
   projectileSpawn:
   - {fileID: 605313637}
   projectile: {fileID: 1085166811, guid: e4913c99c8749447c883ca6cb1d85648, type: 3}
-  msBtwShots: 100
+  msBtwShots: 0
   muzzleVelocity: 20
   burstCount: 3
   reloadTime: 0.3

@@ -22,7 +22,6 @@ public class Gun : MonoBehaviour
     public float reloadTime = .3f;
     public float knockbackForce = 0f;
     
-    public int maxAmmo; //!
     public int currentAmmo;
     public int defaultAmmo;
     public int projectilesPerMag;
@@ -107,7 +106,7 @@ public class Gun : MonoBehaviour
                 if (!bullets[i, index].gameObject.activeSelf) {
                     if (projectilesRemainingInMag == 0) break;
                     projectilesRemainingInMag--;
-                    if (maxAmmo >= 0) currentAmmo--;
+                    if (currentAmmo > 0) currentAmmo--;
                     nextShotTime = Time.time + msBtwShots / 1000;
 
                     bullets[i, index].transform.position = projectileSpawn[i].position;
@@ -136,7 +135,7 @@ public class Gun : MonoBehaviour
     }
 
     public void Reload() {
-        if (!isReloading && projectilesRemainingInMag != projectilesPerMag && ((currentAmmo > 0) || (maxAmmo < 0))) {
+        if ( (currentAmmo < 0) || (!isReloading && (projectilesRemainingInMag != projectilesPerMag) && (currentAmmo > 0)) ) {
             AudioManager.Instance.PlaySound(reloadAudio, transform.position);
             StartCoroutine(AnimateReload());
         }
@@ -162,7 +161,7 @@ public class Gun : MonoBehaviour
 
         // * ReloadFunction
         isReloading = false;
-        if ((currentAmmo >= projectilesPerMag) || (maxAmmo == -1)) {
+        if ((currentAmmo >= projectilesPerMag) || (currentAmmo < 0)) {
             projectilesRemainingInMag = projectilesPerMag;
         }
         else {
@@ -186,9 +185,9 @@ public class Gun : MonoBehaviour
     }
 
     public void AcquireAmmo() {
-        currentAmmo = (currentAmmo + defaultAmmo > maxAmmo) ? maxAmmo : currentAmmo + defaultAmmo;
+        currentAmmo += defaultAmmo;
     }
     public void AcquireAmmo(int ammo) {
-        currentAmmo = (currentAmmo + ammo > maxAmmo) ? maxAmmo : currentAmmo + ammo;
+        currentAmmo += ammo;
     }
 }
