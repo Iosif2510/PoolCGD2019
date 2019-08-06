@@ -12,8 +12,8 @@ public class Shell : MonoBehaviour
     Material mat;
     Color initialColor;
 
-    float lifetime = 2;
-    float fadetime = 2;
+    float lifetime = 1;
+    float fadetime = .5f;
 
     void Awake() {
         mat = GetComponent<Renderer>().material;
