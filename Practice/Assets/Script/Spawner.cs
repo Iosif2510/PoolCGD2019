@@ -229,7 +229,8 @@ public class Spawner : MonoBehaviour
         }
         if (enemiesRemainingAlive == 0) {
             //todo enable elevator
-            spawnedElevator.gameObject.SetActive(true);
+            //spawnedElevator.gameObject.SetActive(true);
+            StartCoroutine(ActivateElevator());
         }
     }
 
@@ -305,9 +306,37 @@ public class Spawner : MonoBehaviour
         ResetPlayerPosition();
 
         if (enemiesRemainingAlive == 0) {
-            spawnedElevator.gameObject.SetActive(true);
+            //spawnedElevator.gameObject.SetActive(true);
+            StartCoroutine(ActivateElevator());
         }
 
+    }
+
+    IEnumerator ActivateElevator()
+    {
+        float timePerColor = .5f;
+        Material tileMat = map.GetTileFromPosition(Vector3.zero).GetComponent<Renderer>().material;
+        Color initialColor = tileMat.color;
+        Color[] effectColors = new Color[4];
+        effectColors[0] = Color.red;
+        effectColors[1] = Color.green;
+        effectColors[2] = Color.blue;
+        effectColors[3] = Color.black;
+
+        float effectTimer = 0;
+        for(int i = 0; i < 4; i++)
+        {
+            while(effectTimer < timePerColor)
+            {
+                tileMat.color = Color.Lerp(initialColor, effectColors[i], effectTimer/timePerColor);
+                effectTimer += Time.deltaTime;
+                yield return null;
+            }
+            effectTimer = 0;
+            initialColor = tileMat.color;
+        }
+
+        spawnedElevator.gameObject.SetActive(true);
     }
 
     [System.Serializable]
