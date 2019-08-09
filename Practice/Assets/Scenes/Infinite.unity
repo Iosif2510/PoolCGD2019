@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641287, b: 0.5748173, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1470,21 +1470,25 @@ MonoBehaviour:
   waves:
   - enemyCount: 5
     timeBetweenSpawns: 1
+    campingCheck: 1
     moveSpeed: 2
     gunDropChance: 0
     colorsToSpawn: 0100000006000000
   - enemyCount: 20
     timeBetweenSpawns: 0.75
+    campingCheck: 1
     moveSpeed: 2.2
     gunDropChance: 0.05
     colorsToSpawn: 0200000005000000
   - enemyCount: 40
     timeBetweenSpawns: 0.6
+    campingCheck: 1
     moveSpeed: 2.5
     gunDropChance: 0.1
     colorsToSpawn: 030000000500000006000000
   - enemyCount: 50
     timeBetweenSpawns: 0.6
+    campingCheck: 1
     moveSpeed: 3
     gunDropChance: 0.1
     colorsToSpawn: 02000000030000000100000004000000
@@ -2487,7 +2491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2496,7 +2500,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -7042,7 +7046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7051,7 +7055,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -7360,6 +7364,9 @@ MonoBehaviour:
   gameOverUI: {fileID: 1246389890}
   inGameUI: {fileID: 122821134}
   pauseUI: {fileID: 1910120526}
+  tutorialUI: {fileID: 0}
+  tutorialWaves: []
+  tutorialClear: {fileID: 0}
   newWaveBanner: {fileID: 1417358832}
   newWaveTitle: {fileID: 1626030195}
   newWaveEnemyCount: {fileID: 1191556880}
@@ -7375,6 +7382,8 @@ MonoBehaviour:
   redColor: {fileID: 450175194}
   greenColor: {fileID: 263948390}
   blueColor: {fileID: 844690820}
+  defaultFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  fontWhenSelected: {fileID: 12800000, guid: cff8e1ae63221e8428b62a86112ffbe3, type: 3}
   ammoParent: {fileID: 950300117}
   ammoPrefab: {fileID: 7165596262861811005, guid: 638b4cc26c4224b05a8fdb71e5c79aa5,
     type: 3}
@@ -7806,6 +7815,7 @@ MonoBehaviour:
   healthLimit: 20
   moveSpeed: 5
   crosshairs: {fileID: 1108190975}
+  isTutorial: 0
 --- !u!114 &1019007187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8134,7 +8144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -8143,7 +8153,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3

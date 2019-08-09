@@ -53,6 +53,8 @@ public class GameUI : MonoBehaviour
     Color redColorFade = new Color(1, 0, 0, 0.5f);
     Color greenColorFade = new Color(0, 1, 0, 0.5f);
     Color blueColorFade = new Color(0, 0, 1, 0.5f);
+    public Font defaultFont;
+    public Font fontWhenSelected;
 
     [Header("Current Weapon UI")]
     public Transform ammoParent;
@@ -239,8 +241,31 @@ public class GameUI : MonoBehaviour
         Color playerColor = playerController.playerColor;
         currentColor.color = playerColor;
         redColor.color = playerColor.r == 1 ? Color.red : redColorFade;
+        ChangeColorHUDFont(redColor);
         greenColor.color = playerColor.g == 1 ? Color.green : greenColorFade;
+        ChangeColorHUDFont(greenColor);
         blueColor.color = playerColor.b == 1 ? Color.blue : blueColorFade;
+        ChangeColorHUDFont(blueColor);
+    }
+
+    void ChangeColorHUDFont(Image ColorImage)
+    {
+        Text colorText = ColorImage.transform.GetChild(0).GetComponent<Text>();
+        if (colorText == null) return;
+
+        if(ColorImage.color.a == 1)
+        {
+            colorText.font = fontWhenSelected;
+            colorText.fontStyle = FontStyle.Bold;
+            colorText.color = Color.white;
+        }
+        else
+        {
+            colorText.font = defaultFont;
+            colorText.fontStyle = FontStyle.Normal;
+            colorText.color = Color.black;
+        }
+            
     }
 
     void SetHeartContainers() {
