@@ -11,6 +11,7 @@ public class GunItem : Item
     protected override void Start()
     {
         base.Start();
+        GetComponent<Renderer>().material.mainTexture = textures[gunNum];
     }
     protected override void Update()
     {

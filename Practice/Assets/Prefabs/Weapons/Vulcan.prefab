@@ -1072,7 +1072,7 @@ GameObject:
   - component: {fileID: 3206824089645793995}
   - component: {fileID: 4983594307050137641}
   m_Layer: 0
-  m_Name: Vulkan
+  m_Name: Vulcan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1121,7 +1121,7 @@ MonoBehaviour:
   muzzleVelocity: 35
   burstCount: 3
   reloadTime: 1.5
-  knockbackForce: 0
+  knockbackForce: 0.1
   currentAmmo: 240
   defaultAmmo: 240
   projectilesPerMag: 60
