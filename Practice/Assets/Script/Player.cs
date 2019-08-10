@@ -82,7 +82,7 @@ public class Player : LivingEntity
         }
 
         if (transform.position.y < -10) {
-            TakeDamage(health);
+            Die();
         }
 
         // Color Change Input

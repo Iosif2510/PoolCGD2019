@@ -263,7 +263,7 @@ public class GameUI : MonoBehaviour
         {
             colorText.font = defaultFont;
             colorText.fontStyle = FontStyle.Normal;
-            colorText.color = Color.black;
+            colorText.color = new Color(0, 0, 0, 0.5f);
         }
             
     }
