@@ -6,6 +6,7 @@ public class GunItem : Item
 {
     int maxGunNum;
     public int gunNum;
+    public int standardGunsNum;
     public Texture[] textures;
 
     protected override void Start()

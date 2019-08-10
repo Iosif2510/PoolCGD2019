@@ -107,6 +107,7 @@ MonoBehaviour:
   rotationSpeed: 40
   timeToDisappear: 5
   gunNum: 0
+  standardGunsNum: 4
   textures:
   - {fileID: 0}
   - {fileID: 2800000, guid: 3db3fe80c43804030a135ee3d69db4a0, type: 3}
