@@ -1,12 +1,18 @@
 fileFormatVersion: 2
-guid: 8cea2682b63a243ab8a54d2c3c1a1a67
+guid: 2d6743bd7d07e480eb9ea511ed26593f
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 4432793351920879750
+    second: Hearts_0
+  - first:
+      213: 5642012044021194823
+    second: Hearts_1
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -40,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -115,11 +121,53 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Hearts_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 32
+        width: 68
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6033a5dc8f13d4605b4f308c6b127dad
+      internalID: 4432793351920879750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hearts_1
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 32
+        width: 68
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b05334b8cd0ed4c859ab30ce872be398
+      internalID: 5642012044021194823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 02efa9309905a4bed94c5d4ded49eaca
     internalID: 0
     vertices: []
     indices: 

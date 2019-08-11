@@ -6,11 +6,13 @@ public class GunItem : Item
 {
     int maxGunNum;
     public int gunNum;
+    public int standardGunsNum;
     public Texture[] textures;
 
     protected override void Start()
     {
         base.Start();
+        GetComponent<Renderer>().material.mainTexture = textures[gunNum];
     }
     protected override void Update()
     {

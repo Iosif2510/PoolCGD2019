@@ -27,6 +27,8 @@ public class Spawner : MonoBehaviour
 
     public GunController gunController;
     public GunItem gunItem;
+    public HealingItem healthItem;
+    public MaxHealthItem injector;
 
     public Elevator elevator;
     Vector3 elevatorPosition;
@@ -218,15 +220,38 @@ public class Spawner : MonoBehaviour
     void OnEnemyDeath(Vector3 _position) {
         enemiesRemainingAlive--;
         
-        if ((gunController != null) && (Random.Range(0f, 1f) < currentWave.gunDropChance)) { //spawn gun item by chance
+        float randomNum = Random.Range(0f, 1f);
+        if ((gunController != null) && (randomNum < currentWave.gunDropChance)) { //spawn gun item by chance
             GunItem spawnedGunItem = Instantiate(gunItem, _position, Quaternion.identity) as GunItem;
             //Debug.Log("Item spawned");
-            int randomItemIndex = (int)Random.Range(1,gunController.allGuns.Length);
+            int randomItemIndex = (int)Random.Range(1,spawnedGunItem.standardGunsNum);
             //Debug.Log(randomItemIndex);
             spawnedGunItem.SetGunItem(randomItemIndex);
-            if (currentMode == GameMode.Tutorial)
-                spawnedGunItem.SetDisappearance(false);
+            if (currentMode == GameMode.Tutorial) spawnedGunItem.SetDisappearance(false);
         }
+
+        else if (randomNum < (currentWave.gunDropChance + currentWave.healthDropChance)) {
+            HealingItem spawnedHealthItem = Instantiate(healthItem, _position, Quaternion.identity) as HealingItem;
+            if (currentMode == GameMode.Tutorial) spawnedHealthItem.SetDisappearance(false);
+        }
+
+        else if (randomNum < (currentWave.gunDropChance + currentWave.healthDropChance + currentWave.injectorDropChance)) {
+            MaxHealthItem spawnedInjector = Instantiate(injector, _position, Quaternion.identity) as MaxHealthItem;
+            if (currentMode == GameMode.Tutorial) spawnedInjector.SetDisappearance(false); 
+        }
+
+        else if (gunController != null && (randomNum < (currentWave.gunDropChance + currentWave.healthDropChance + currentWave.injectorDropChance + currentWave.superGunDropChance))) {
+            GunItem superGunItem = Instantiate(gunItem, _position, Quaternion.identity) as GunItem;
+            //Debug.Log("Item spawned");
+            int randomItemIndex = (int)Random.Range(superGunItem.standardGunsNum, gunController.allGuns.Length);
+            //Debug.Log(randomItemIndex);
+            superGunItem.SetGunItem(randomItemIndex);
+            if (currentMode == GameMode.Tutorial) superGunItem.SetDisappearance(false);
+        }
+
+
+
+
         if (enemiesRemainingAlive == 0) {
             //todo enable elevator
             //spawnedElevator.gameObject.SetActive(true);
@@ -267,7 +292,7 @@ public class Spawner : MonoBehaviour
             currentWave.gunDropChance = 0.03f;
             */
 
-            currentWave.SetWaveProperty(1f, 3, 0.03f);
+            currentWave.SetWaveProperty(1f, 3, 0.1f, 0.1f, 0.03f, 0.02f);
             currentWave.SpawnAllColor();
             //print($"Gun Drop Chance: {currentWave.gunDropChance}");
         }
@@ -349,12 +374,21 @@ public class Spawner : MonoBehaviour
 
         [Range(0,1)]
         public float gunDropChance;
+        [Range(0,1)]
+        public float healthDropChance;
+        [Range(0,1)]
+        public float injectorDropChance;
+        [Range(0,1)]
+        public float superGunDropChance;
         public ColorState[] colorsToSpawn;
 
-        public void SetWaveProperty(float _timeBtwSpawns, float _movSpeed, float _gunDropChance) {
+        public void SetWaveProperty(float _timeBtwSpawns, float _movSpeed, float _gun, float _health, float _injector, float _supergun) {
             timeBetweenSpawns = _timeBtwSpawns;
             moveSpeed = _movSpeed;
-            gunDropChance = _gunDropChance;
+            gunDropChance = _gun;
+            healthDropChance = _health;
+            injectorDropChance = _injector;
+            superGunDropChance = _supergun;
         }
 
         public void SpawnAllColor() {

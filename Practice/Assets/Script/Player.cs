@@ -46,7 +46,6 @@ public class Player : LivingEntity
             health = maxHealth;
         }
         else base.Die();
-        
     }
 
     void Update() {
