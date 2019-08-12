@@ -1507,10 +1507,11 @@ MonoBehaviour:
   - {fileID: 3120143630414091388, guid: ecc9d5e6694604274b02b46d445d8680, type: 3}
   - {fileID: 3120143630414091388, guid: 89a9014eebec44984af9095ced779701, type: 3}
   - {fileID: 3120143630414091388, guid: 1524d3b88f0d44d88a70eece1b37e9cc, type: 3}
-  gunController: {fileID: 0}
   gunItem: {fileID: 541812804097702703, guid: e55b8f1fc407fcd4fbe5174cdb957ee5, type: 3}
-  healthItem: {fileID: 0}
-  injector: {fileID: 0}
+  healthItem: {fileID: 1523586463226567187, guid: 19b2c7cc97f517042ae1741ceb49149b,
+    type: 3}
+  injector: {fileID: 6949775609164205866, guid: 7b59d3925d3f4cf479945c1bfee4d325,
+    type: 3}
   elevator: {fileID: 8589872790367442026, guid: 69ac6f053e5244c8287bed2e37e84a6e,
     type: 3}
   timeBtwCampingChecks: 6

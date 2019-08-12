@@ -20,12 +20,12 @@ public class Spawner : MonoBehaviour
     public Enemy enemy;
     LivingEntity playerEntity;
     Transform playerT;
+    GunController gunController;
 
     public enum ColorState { White = 0, Red, Blue, Green, Magenta, Cyan, Yellow };
     public ParticleSystem[] deathParticles;
     public Dictionary<ColorState, ParticleSystem> deathParticlesDict = new Dictionary<ColorState, ParticleSystem>();
 
-    public GunController gunController;
     public GunItem gunItem;
     public HealingItem healthItem;
     public MaxHealthItem injector;
