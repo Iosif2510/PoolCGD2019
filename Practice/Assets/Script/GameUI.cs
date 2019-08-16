@@ -221,6 +221,7 @@ public class GameUI : MonoBehaviour
 
     public void ReturnToMainMenu() {
         BeforeLoadScene();
+        Cursor.visible = true;
         SceneManager.LoadScene("GameMenu");
     }
 

@@ -17,7 +17,7 @@ public class VideoPlay : MonoBehaviour
     IEnumerator PlayVideo()
     {
         videoPlayer.Prepare();
-        WaitForSeconds wfs = new WaitForSeconds(1);
+        WaitForSeconds wfs = new WaitForSeconds(.5f);
         while (!videoPlayer.isPrepared)
         {
             yield return wfs;
