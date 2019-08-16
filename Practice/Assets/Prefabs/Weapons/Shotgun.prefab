@@ -668,7 +668,7 @@ MonoBehaviour:
   muzzleVelocity: 20
   burstCount: 3
   reloadTime: 1
-  knockbackForce: 0.2
+  knockbackForce: 0.1
   currentAmmo: 100
   defaultAmmo: 20
   projectilesPerMag: 7
