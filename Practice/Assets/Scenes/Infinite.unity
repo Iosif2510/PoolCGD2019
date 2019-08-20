@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641287, b: 0.5748173, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1463,42 +1463,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   devMode: 1
   waves:
-  - enemyCount: 5
-    timeBetweenSpawns: 1
+  - enemyCount: 10
+    timeBetweenSpawns: 2
     campingCheck: 1
-    moveSpeed: 2
+    moveSpeed: 2.5
     gunDropChance: 0
     healthDropChance: 0
     injectorDropChance: 0
     superGunDropChance: 0
     colorsToSpawn: 0100000006000000
-  - enemyCount: 20
-    timeBetweenSpawns: 0.75
+  - enemyCount: 10
+    timeBetweenSpawns: 2
     campingCheck: 1
-    moveSpeed: 2.2
+    moveSpeed: 2.5
     gunDropChance: 0.05
     healthDropChance: 0.05
     injectorDropChance: 0
     superGunDropChance: 0
-    colorsToSpawn: 0200000005000000
-  - enemyCount: 40
-    timeBetweenSpawns: 0.6
+    colorsToSpawn: 020000000500000003000000
+  - enemyCount: 10
+    timeBetweenSpawns: 2
     campingCheck: 1
     moveSpeed: 2.5
     gunDropChance: 0.1
     healthDropChance: 0.1
     injectorDropChance: 0.01
     superGunDropChance: 0.01
-    colorsToSpawn: 030000000500000006000000
-  - enemyCount: 50
-    timeBetweenSpawns: 0.6
+    colorsToSpawn: 03000000050000000600000001000000
+  - enemyCount: 15
+    timeBetweenSpawns: 2
     campingCheck: 1
-    moveSpeed: 3
+    moveSpeed: 2.5
     gunDropChance: 0.1
     healthDropChance: 0.1
     injectorDropChance: 0.03
     superGunDropChance: 0.02
-    colorsToSpawn: 02000000030000000100000004000000
+    colorsToSpawn: 020000000300000001000000040000000600000004000000
   enemy: {fileID: 2753646212322466918, guid: 7f3b4c54a8c1e4ddeabc2bf002423f00, type: 3}
   deathParticles:
   - {fileID: 3120143630414091388, guid: 9cba66ad7d480405aa10f17d8ad8b6d7, type: 3}
