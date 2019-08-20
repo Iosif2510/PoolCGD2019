@@ -34,7 +34,7 @@ public class MusicManager : MonoBehaviour
         AudioClip clipToPlay = null;
 
         if (sceneName == "GameMenu") clipToPlay = menuTheme;
-        else if (sceneName == "Infinite") clipToPlay = mainTheme;
+        else clipToPlay = mainTheme;
 
         if (clipToPlay != null) {
             AudioManager.Instance.PlayMusic(clipToPlay, 2);

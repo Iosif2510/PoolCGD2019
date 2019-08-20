@@ -115,6 +115,8 @@ public class GameUI : MonoBehaviour
     {
         pauseDisabled = true;
         Time.timeScale = 0;
+        player.paused = true;
+        Cursor.visible = true;
         tutorialWaves[tutorialWaves.Length - 1].SetActive(false);
         tutorialClear.SetActive(true);
     }
@@ -185,12 +187,16 @@ public class GameUI : MonoBehaviour
             pauseUI.SetActive(true);
             isPaused = true;
             Time.timeScale = 0;
+            Cursor.visible = true;
+            player.paused = true;
         }
         else {
             Time.timeScale = 1;
             pauseUI.SetActive(false);
             inGameUI.SetActive(true);
             isPaused = false;
+            Cursor.visible = false;
+            player.paused = false;
         }
 
     }

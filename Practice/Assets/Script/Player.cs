@@ -13,6 +13,7 @@ public class Player : LivingEntity
     PlayerController controller;
     GunController gunController;
     Camera ViewCamera;
+    public bool paused = false;
     public bool isTutorial = false;
 
     protected override void Awake() {
@@ -22,15 +23,10 @@ public class Player : LivingEntity
         controller = GetComponent<PlayerController>();
         gunController = GetComponent<GunController>();
         ViewCamera = Camera.main;
-        FindObjectOfType<Spawner>().OnNewWave += OnNewWave;
     }
 
     protected override void Start() {
         base.Start();
-    }
-
-    void OnNewWave(int waveNumber) {
-        health = startingHealth;
     }
 
     public override void TakeDamage(int damage)
@@ -49,6 +45,9 @@ public class Player : LivingEntity
     }
 
     void Update() {
+
+        if (paused) return;
+
         //* Movement Input
         Vector3 moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         Vector3 moveVelocity = moveInput.normalized * moveSpeed;
