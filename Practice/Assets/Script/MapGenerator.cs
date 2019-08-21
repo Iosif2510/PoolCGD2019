@@ -58,7 +58,40 @@ public class MapGenerator : MonoBehaviour
             Coord mapSize = new Coord(mapRand.Next(15, (int)maxMapSize.x - 1), mapRand.Next(15, (int)maxMapSize.y - 1));
             Debug.Log($"Mapsize: {mapSize.x}, {mapSize.y}");
             float obstaclePercent = (float)mapRand.NextDouble() * 0.4f;
-            Map newMap = new Map(mapSize, obstaclePercent, mapRand.Next());
+            
+            Color randomBackColor, randomForeColor;
+            switch (Random.Range(0,6)) {
+                case 0:
+                    randomBackColor = Color.red;
+                    randomForeColor = Color.magenta;
+                    break;
+                case 1:
+                    randomBackColor = Color.green;
+                    randomForeColor = Color.yellow;
+                    break;
+                case 2:
+                    randomBackColor = Color.blue;
+                    randomForeColor = Color.cyan;
+                    break;
+                case 3:
+                    randomBackColor = Color.magenta;
+                    randomForeColor = Color.blue;
+                    break;
+                case 4:
+                    randomBackColor = Color.cyan;
+                    randomForeColor = Color.green;
+                    break;
+                case 5:
+                    randomBackColor = Color.yellow;
+                    randomForeColor = Color.red;
+                    break;
+                default:
+                    randomBackColor = Color.black;
+                    randomForeColor = Color.white;
+                    break;
+            }
+
+            Map newMap = new Map(mapSize, obstaclePercent, mapRand.Next(), randomBackColor, randomForeColor);
             GenerateMap(newMap);
         } // Infinite mode 정해진 맵 목록 이후 랜덤 맵 출현
         else if (currentMode == GameMode.Tutorial) {
@@ -280,12 +313,14 @@ public class MapGenerator : MonoBehaviour
             maxObstacleHeight = 3;
         }
 
-        public Map(Coord _mapSize, float _obstaclePercent, int _seed) { //Generating Random Map
+        public Map(Coord _mapSize, float _obstaclePercent, int _seed, Color _back, Color _fore) { //Generating Random Map
             mapSize = _mapSize;
             obstaclePercent = _obstaclePercent;
             seed = _seed;
             minObstacleHeight = 1;
             maxObstacleHeight = 3;        
+            backgroundColor = _back;
+            foregroundColor = _fore;
         }
     }
 }

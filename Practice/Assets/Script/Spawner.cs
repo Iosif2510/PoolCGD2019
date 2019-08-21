@@ -37,7 +37,7 @@ public class Spawner : MonoBehaviour
     public Wave currentWave {
         get; private set;
     }
-    int currentWaveNumber;
+    int currentWaveNumber = 0;
 
     int enemiesRemainingToSpawn;
     public int enemiesRemainingAlive { get; private set; }
@@ -267,6 +267,7 @@ public class Spawner : MonoBehaviour
     }
 
     void NextWave() {
+        Wave lastWave = currentWave;
         currentWaveNumber++;
 
         if (currentWaveNumber > 1) {
@@ -280,11 +281,13 @@ public class Spawner : MonoBehaviour
         
         else if (currentMode == GameMode.Infinite) {
             //print("Random Wave: " + currentWaveNumber);
-            System.Random psrd = new System.Random();
             currentWave = new Wave();
+
+            /*
             int minSpawn = Mathf.Min(waves[waves.Length - 1].enemyCount + (currentWaveNumber - waves.Length) * 10, 200);
             int maxSpawn = Mathf.Min(waves[waves.Length - 1].enemyCount  + (currentWaveNumber - waves.Length) * 10 + 50, 200) + 1;
             currentWave.enemyCount = psrd.Next(minSpawn, maxSpawn);
+            */
 
             /*
             currentWave.timeBetweenSpawns = 1f;
@@ -292,7 +295,24 @@ public class Spawner : MonoBehaviour
             currentWave.gunDropChance = 0.03f;
             */
 
-            currentWave.SetWaveProperty(1f, 3, 0.1f, 0.1f, 0.03f, 0.02f);
+            float currentTimeBtwSpawn = lastWave.timeBetweenSpawns;
+            int currentEnemyCount = lastWave.enemyCount;
+            float currentMoveSpeed = lastWave.moveSpeed;
+
+            switch (currentWaveNumber % 3) {
+                case 2:
+                    currentMoveSpeed = Mathf.Min(currentMoveSpeed * 1.05f, 3.5f);
+                    break;
+                case 0:
+                    currentEnemyCount = Mathf.Min((int)(currentEnemyCount * 1.1f), 150);
+                    break;
+                case 1:
+                    currentTimeBtwSpawn = Mathf.Max(currentTimeBtwSpawn * 0.95f, 1f); 
+                    break;
+
+            }
+
+            currentWave.SetWaveProperty(currentEnemyCount, currentTimeBtwSpawn, currentMoveSpeed, 0.1f, 0.1f, 0.03f, 0.02f);
             currentWave.SpawnAllColor();
             //print($"Gun Drop Chance: {currentWave.gunDropChance}");
         }
@@ -382,7 +402,8 @@ public class Spawner : MonoBehaviour
         public float superGunDropChance;
         public ColorState[] colorsToSpawn;
 
-        public void SetWaveProperty(float _timeBtwSpawns, float _movSpeed, float _gun, float _health, float _injector, float _supergun) {
+        public void SetWaveProperty(int _enemyCount, float _timeBtwSpawns, float _movSpeed, float _gun, float _health, float _injector, float _supergun) {
+            enemyCount = _enemyCount;
             timeBetweenSpawns = _timeBtwSpawns;
             moveSpeed = _movSpeed;
             gunDropChance = _gun;
