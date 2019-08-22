@@ -344,7 +344,7 @@ public class Spawner : MonoBehaviour
             spawnedElevator.NextWave -= NextWave;
             Destroy(spawnedElevator.gameObject);
         }
-        elevatorPosition = map.GetTileFromPosition(Vector3.zero).transform.position + new Vector3(0, -3, 0);
+        elevatorPosition = map.CoordToPosition(map.GetCurrentMapCenter().x, map.GetCurrentMapCenter().y) + new Vector3(0, -3, 0);
         spawnedElevator = Instantiate(elevator, elevatorPosition, Quaternion.identity);
         spawnedElevator.NextWave += NextWave;
         spawnedElevator.gameObject.SetActive(false);
@@ -360,7 +360,7 @@ public class Spawner : MonoBehaviour
     IEnumerator ActivateElevator()
     {
         float timePerColor = .5f;
-        Material tileMat = map.GetTileFromPosition(Vector3.zero).GetComponent<Renderer>().material;
+        Material tileMat = map.GetTileFromPosition(map.CoordToPosition(map.GetCurrentMapCenter().x, map.GetCurrentMapCenter().y)).GetComponent<Renderer>().material;
         Color initialColor = tileMat.color;
         Color[] effectColors = new Color[4];
         effectColors[0] = Color.red;

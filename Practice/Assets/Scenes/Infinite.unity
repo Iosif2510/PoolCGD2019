@@ -1463,26 +1463,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   devMode: 1
   waves:
-  - enemyCount: 5
-    timeBetweenSpawns: 1
+  - enemyCount: 10
+    timeBetweenSpawns: 2
     campingCheck: 1
-    moveSpeed: 2
+    moveSpeed: 2.5
     gunDropChance: 0
     healthDropChance: 0
     injectorDropChance: 0
     superGunDropChance: 0
     colorsToSpawn: 0100000006000000
-  - enemyCount: 20
-    timeBetweenSpawns: 0.75
+  - enemyCount: 10
+    timeBetweenSpawns: 2
     campingCheck: 1
-    moveSpeed: 2.2
+    moveSpeed: 2.5
     gunDropChance: 0.05
     healthDropChance: 0.05
     injectorDropChance: 0
     superGunDropChance: 0
     colorsToSpawn: 0200000005000000
-  - enemyCount: 40
-    timeBetweenSpawns: 0.6
+  - enemyCount: 10
+    timeBetweenSpawns: 2
     campingCheck: 1
     moveSpeed: 2.5
     gunDropChance: 0.1
@@ -1490,10 +1490,10 @@ MonoBehaviour:
     injectorDropChance: 0.01
     superGunDropChance: 0.01
     colorsToSpawn: 030000000500000006000000
-  - enemyCount: 50
-    timeBetweenSpawns: 0.6
+  - enemyCount: 15
+    timeBetweenSpawns: 2
     campingCheck: 1
-    moveSpeed: 3
+    moveSpeed: 2.5
     gunDropChance: 0.1
     healthDropChance: 0.1
     injectorDropChance: 0.03
@@ -9661,14 +9661,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 0.5019608}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: b78790e346ef14fd2a0ce436dcce394d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 141fb2e6404a2dd4b98bac92f7dd2e0f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10152,7 +10152,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 8ac48abad3c375d4498e9801c313c70b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1bd218a58f75f464f9bf6deb032baf9a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

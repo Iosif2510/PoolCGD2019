@@ -257,6 +257,11 @@ public class MapGenerator : MonoBehaviour
         return tileMap[randomCoord.x, randomCoord.y];
     }
 
+    public Coord GetCurrentMapCenter()
+    {
+        return currentMap.mapCenter;
+    }
+
     [System.Serializable]
     public struct Coord {
         public int x, y;
