@@ -59,9 +59,11 @@ public class MapGenerator : MonoBehaviour
             int newMapSizeY = mapRand.Next(6, (int)maxMapSize.y - 1);
             if (newMapSizeX + newMapSizeY < 25)
                 newMapSizeY = 25 - newMapSizeX;
+            else if (newMapSizeX + newMapSizeY > 45)
+                newMapSizeY = 45 - newMapSizeX;
             Coord mapSize = new Coord(newMapSizeX, newMapSizeY);
             //Debug.Log($"Mapsize: {mapSize.x}, {mapSize.y}");
-            float obstaclePercent = (float)mapRand.NextDouble() * 0.25f + 0.05f;
+            float obstaclePercent = (float)mapRand.NextDouble() * 0.2f + 0.1f;
             
             Color randomBackColor, randomForeColor;
             switch (Random.Range(0,6)) {
