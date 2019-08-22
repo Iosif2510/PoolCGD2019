@@ -57,7 +57,7 @@ public class MapGenerator : MonoBehaviour
             mapRand = new System.Random((int)Time.time + mapIndex);
             Coord mapSize = new Coord(mapRand.Next(15, (int)maxMapSize.x - 1), mapRand.Next(15, (int)maxMapSize.y - 1));
             Debug.Log($"Mapsize: {mapSize.x}, {mapSize.y}");
-            float obstaclePercent = (float)mapRand.NextDouble() * 0.4f;
+            float obstaclePercent = (float)mapRand.NextDouble() * 0.25f + 0.05f;
             
             Color randomBackColor, randomForeColor;
             switch (Random.Range(0,6)) {

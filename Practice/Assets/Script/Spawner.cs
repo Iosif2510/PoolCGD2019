@@ -301,7 +301,7 @@ public class Spawner : MonoBehaviour
 
             switch (currentWaveNumber % 3) {
                 case 2:
-                    currentMoveSpeed = Mathf.Min(currentMoveSpeed * 1.05f, 3.5f);
+                    currentMoveSpeed = Mathf.Min(currentMoveSpeed * 1.1f, 4f);
                     break;
                 case 0:
                     currentEnemyCount = Mathf.Min((int)(currentEnemyCount * 1.1f), 150);
