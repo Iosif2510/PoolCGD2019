@@ -34,6 +34,8 @@ public class Spawner : MonoBehaviour
     Vector3 elevatorPosition;
     Elevator spawnedElevator;
 
+    Vector3 currentMapCenter;
+
     public Wave currentWave {
         get; private set;
     }
@@ -263,7 +265,7 @@ public class Spawner : MonoBehaviour
         if ((currentMode == GameMode.Tutorial) && (currentWave == waves[0])) {
             playerT.position = map.GetTileFromPosition(new Vector3(2, 0, 3)).position + Vector3.up * 3;
         }
-        else playerT.position = map.GetTileFromPosition(Vector3.zero).position + Vector3.up * 3;
+        else playerT.position = currentMapCenter + Vector3.up * 3;
     }
 
     void NextWave() {
@@ -337,6 +339,7 @@ public class Spawner : MonoBehaviour
 
         if (OnNewWave != null) {
             OnNewWave(currentWaveNumber);
+            currentMapCenter = map.GetCurrentMapCenter();
         }
 
         //* elevator spawn
@@ -344,7 +347,7 @@ public class Spawner : MonoBehaviour
             spawnedElevator.NextWave -= NextWave;
             Destroy(spawnedElevator.gameObject);
         }
-        elevatorPosition = map.CoordToPosition(map.GetCurrentMapCenter().x, map.GetCurrentMapCenter().y) + new Vector3(0, -3, 0);
+        elevatorPosition = currentMapCenter + new Vector3(0, -3, 0);
         spawnedElevator = Instantiate(elevator, elevatorPosition, Quaternion.identity);
         spawnedElevator.NextWave += NextWave;
         spawnedElevator.gameObject.SetActive(false);
@@ -360,7 +363,7 @@ public class Spawner : MonoBehaviour
     IEnumerator ActivateElevator()
     {
         float timePerColor = .5f;
-        Material tileMat = map.GetTileFromPosition(map.CoordToPosition(map.GetCurrentMapCenter().x, map.GetCurrentMapCenter().y)).GetComponent<Renderer>().material;
+        Material tileMat = map.GetTileFromPosition(currentMapCenter).GetComponent<Renderer>().material;
         Color initialColor = tileMat.color;
         Color[] effectColors = new Color[4];
         effectColors[0] = Color.red;

@@ -45,7 +45,7 @@ public class GunController : MonoBehaviour
         acquiredGuns[weaponIndex] = true;
         if(OnEquipGun != null)
             OnEquipGun();
-        print("OnEquipGun called");
+        //print("OnEquipGun called");
     }
 
     public void OnTriggerHold() {

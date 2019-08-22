@@ -149,7 +149,6 @@ public class Enemy : LivingEntity
 
     IEnumerator Knockback(Vector3 hitDirection, float knockbackForce)
     {
-        State beforeState = currentState;
         currentState = State.Idle;
         float knockbackTime = 0.1f;
         while(knockbackTime >= 0)
@@ -158,7 +157,7 @@ public class Enemy : LivingEntity
             knockbackTime -= Time.deltaTime;
             yield return null;
         }
-        currentState = beforeState;
+        currentState = State.Chasing;
         if (skinMaterial.color == Color.white)
         { //Death Effect
             if (OnDeathStatic != null) OnDeathStatic();

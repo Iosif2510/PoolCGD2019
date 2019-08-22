@@ -51,7 +51,7 @@ public class Projectile : MonoBehaviour
         if (initialCollisions.Length > 0) {
             OnhitObject(initialCollisions[0], transform.position, ownerColor);
         }
-        print($"Bullet Color: {ownerColor.r}, {ownerColor.g}, {ownerColor.b}");
+        //print($"Bullet Color: {ownerColor.r}, {ownerColor.g}, {ownerColor.b}");
     }
 
     void Update()

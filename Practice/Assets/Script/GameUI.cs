@@ -349,7 +349,7 @@ public class GameUI : MonoBehaviour
             }
             else
             {
-                print("Ammo SetInactive");
+                //print("Ammo SetInactive");
                 ammo[i].SetActive(false);
             }
         }

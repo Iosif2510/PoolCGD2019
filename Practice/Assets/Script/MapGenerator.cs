@@ -55,8 +55,12 @@ public class MapGenerator : MonoBehaviour
         else if (currentMode == GameMode.Infinite) {
             mapIndex++;
             mapRand = new System.Random((int)Time.time + mapIndex);
-            Coord mapSize = new Coord(mapRand.Next(15, (int)maxMapSize.x - 1), mapRand.Next(15, (int)maxMapSize.y - 1));
-            Debug.Log($"Mapsize: {mapSize.x}, {mapSize.y}");
+            int newMapSizeX = mapRand.Next(6, (int)maxMapSize.x - 1);
+            int newMapSizeY = mapRand.Next(6, (int)maxMapSize.y - 1);
+            if (newMapSizeX + newMapSizeY < 25)
+                newMapSizeY = 25 - newMapSizeX;
+            Coord mapSize = new Coord(newMapSizeX, newMapSizeY);
+            //Debug.Log($"Mapsize: {mapSize.x}, {mapSize.y}");
             float obstaclePercent = (float)mapRand.NextDouble() * 0.25f + 0.05f;
             
             Color randomBackColor, randomForeColor;
@@ -257,9 +261,9 @@ public class MapGenerator : MonoBehaviour
         return tileMap[randomCoord.x, randomCoord.y];
     }
 
-    public Coord GetCurrentMapCenter()
+    public Vector3 GetCurrentMapCenter()
     {
-        return currentMap.mapCenter;
+        return CoordToPosition(currentMap.mapCenter.x, currentMap.mapCenter.y);
     }
 
     [System.Serializable]

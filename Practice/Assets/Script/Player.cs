@@ -103,7 +103,7 @@ public class Player : LivingEntity
             int index;
             for (index = positiveMod(gunController.currnetGunIndex - 1, allGunNum); !gunController.acquiredGuns[index];
             index = positiveMod(index - 1, allGunNum)) {}
-            print(index);
+            //print(index);
             gunController.EquipGun(index);
         }
 
@@ -111,7 +111,7 @@ public class Player : LivingEntity
             int index;
             for (index = (gunController.currnetGunIndex + 1) % allGunNum; !gunController.acquiredGuns[index];
             index = (index + 1) % allGunNum) {}
-            print(index);
+            //print(index);
             gunController.EquipGun(index);
         }
 
