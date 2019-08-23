@@ -172,7 +172,7 @@ public class GameUI : MonoBehaviour
             StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .9f), 1));
             gameOverScoreUI.text = scoreUI.text;
             if (ScoreKeeper.score > ScoreKeeper.highscore) highScoreUI.text = "New Highscore!";
-            highScoreUI.text = $"HighScore: {ScoreKeeper.highscore.ToString("D6")}";
+            else highScoreUI.text = $"HighScore: {ScoreKeeper.highscore.ToString("D6")}";
             inGameUI.SetActive(false);
             Cursor.visible = true;
             gameOverUI.SetActive(true);
